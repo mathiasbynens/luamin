@@ -74,26 +74,27 @@ var formatExpression = function(expression, precedence) {
 	precedence || (precedence = 0);
 
 	var result = '';
-	var tmp = '';
 	var currentPrecedence;
 
-	if (expression.type == 'Identifier') {
+	var expressionType = expression.type;
+
+	if (expressionType == 'Identifier') {
 
 		result += expression.name;
 
 	} else if (
-		expression.type == 'NumericLiteral' ||
-		expression.type == 'BooleanLiteral' ||
-		expression.type == 'NilLiteral' ||
-		expression.type == 'StringLiteral' ||
-		expression.type == 'VarargLiteral'
+		expressionType == 'NumericLiteral' ||
+		expressionType == 'BooleanLiteral' ||
+		expressionType == 'NilLiteral' ||
+		expressionType == 'StringLiteral' ||
+		expressionType == 'VarargLiteral'
 	) {
 
 		result += expression.raw;
 
 	} else if (
-		expression.type == 'LogicalExpression' ||
-		expression.type == 'BinaryExpression'
+		expressionType == 'LogicalExpression' ||
+		expressionType == 'BinaryExpression'
 	) {
 
 		// if an expression with precedence x
@@ -110,45 +111,44 @@ var formatExpression = function(expression, precedence) {
 			result = '(' + result + ')';
 		}
 
-	} else if (expression.type == 'UnaryExpression') {
+	} else if (expressionType == 'UnaryExpression') {
 
 		currentPrecedence = Precedence['unary' + expression.operator];
 
-		result = joinStatements(result, expression.operator);
-		result = joinStatements(result, formatExpression(expression.argument, currentPrecedence));
+		result = joinStatements(expression.operator, formatExpression(expression.argument, currentPrecedence));
 
 		if (currentPrecedence < precedence) {
 			result = '(' + result + ')';
 		}
 
-	} else if (expression.type == 'CallExpression') {
+	} else if (expressionType == 'CallExpression') {
 
 		result += formatExpression(expression.base);
 		result += '(';
 
-		result += expression['arguments'].map(function(argument) {
+		result += expression.arguments.map(function(argument) {
 			return formatExpression(argument);
 		}).join(',');
 		result += ')';
 
-	} else if (expression.type == 'TableCallExpression') { // e.g. `foo{1,2,3}`
+	} else if (expressionType == 'TableCallExpression') { // e.g. `foo{1,2,3}`
 
 		result += formatExpression(expression.base);
-		result += formatExpression(expression['arguments']);
+		result += formatExpression(expression.arguments);
 
-	} else if (expression.type == 'StringCallExpression') { // e.g. `foo'lol'`
+	} else if (expressionType == 'StringCallExpression') { // e.g. `foo'lol'`
 
 		result += formatExpression(expression.base) + formatExpression(expression.argument);
 
-	} else if (expression.type == 'IndexExpression') { // e.g. `x[2]`
+	} else if (expressionType == 'IndexExpression') { // e.g. `x[2]`
 
 		result += formatExpression(expression.base) + '[' + formatExpression(expression.index) + ']';
 
-	} else if (expression.type == 'MemberExpression') { // e.g. `x:sub(1, 1)`
+	} else if (expressionType == 'MemberExpression') { // e.g. `x:sub(1, 1)`
 
 		result += formatExpression(expression.base) + expression.indexer + formatExpression(expression.identifier);
 
-	} else if (expression.type == 'FunctionDeclaration') {
+	} else if (expressionType == 'FunctionDeclaration') {
 
 		obfuscateVariables(expression);
 
@@ -163,7 +163,7 @@ var formatExpression = function(expression, precedence) {
 		result = joinStatements(result, formatStatementList(expression.body));
 		result += 'end';
 
-	} else if (expression.type == 'TableConstructorExpression') {
+	} else if (expressionType == 'TableConstructorExpression') {
 
 		result += '{';
 
@@ -214,13 +214,10 @@ var formatStatement = function(statement) {
 		}).join(',');
 
 		// right-hand side
-		if (statement.init.length) {
-			result += '=';
-			result += statement.init.map(function(init) {
-				return formatExpression(init);
-			}).join(',');
-
-		}
+		result += '=';
+		result += statement.init.map(function(init) {
+			return formatExpression(init);
+		}).join(',');
 
 	} else if (statement.type == 'LocalStatement') {
 
@@ -269,15 +266,14 @@ var formatStatement = function(statement) {
 
 	} else if (statement.type == 'DoStatement') {
 
-		result = joinStatements(result, 'do');
-		result = joinStatements(result, formatStatementList(statement.body));
+		result = joinStatements('do', formatStatementList(statement.body));
 		result = joinStatements(result, 'end');
 
 	} else if (statement.type == 'ReturnStatement') {
 
 		result = 'return';
 
-		var args = statement['arguments'];
+		var args = statement.arguments;
 		var length = args.length - 1;
 		args.forEach(function(argument, index) {
 			result = joinStatements(result, formatExpression(args[index])) + (index < length ? ',' : '');
@@ -289,8 +285,7 @@ var formatStatement = function(statement) {
 
 	} else if (statement.type == 'RepeatStatement') {
 
-		result = 'repeat';
-		result = joinStatements(result, formatStatementList(statement.body));
+		result = joinStatements('repeat', formatStatementList(statement.body));
 		result = joinStatements(result, 'until');
 		result = joinStatements(result, formatExpression(statement.condition))
 
@@ -298,11 +293,7 @@ var formatStatement = function(statement) {
 
 		obfuscateVariables(statement);
 
-		if (statement.local) {
-			result = 'local';
-		}
-
-		result = joinStatements(result, 'function ');
+		result = (statement.local ? 'local ' : '') + 'function ';
 		result += formatExpression(statement.identifier);
 		result += '(';
 
@@ -311,13 +302,6 @@ var formatStatement = function(statement) {
 				// `Identifier`s have a `name`, `VarargLiteral`s have a `value`
 				return parameter.name || parameter.value;
 			}).join(',');
-			if (statement.vararg) {
-				result += ',...';
-			}
-		} else {
-			if (statement.vararg) {
-				result += '...';
-			}
 		}
 
 		result += ')';
@@ -352,8 +336,7 @@ var formatStatement = function(statement) {
 
 	} else if (statement.type == 'ForNumericStatement') {
 
-		result = 'for ';
-		result += statement.variable.name + '=';
+		result = 'for ' + statement.variable.name + '=';
 		result += formatExpression(statement.start) + ',' + formatExpression(statement.end);
 
 		if (statement.step) {
@@ -371,10 +354,6 @@ var formatStatement = function(statement) {
 	} else if (statement.type == 'GotoStatement') {
 
 		result = 'goto ' + statement.label.name;
-
-	} else if (statement.type == 'Comment') {
-
-		// do nothing
 
 	} else {
 
@@ -394,6 +373,6 @@ var minify = function(code) {
 };
 
 module.exports = {
-	'version': '0.0.1',
+	'version': '0.0.0-alpha',
 	'minify': minify
 };

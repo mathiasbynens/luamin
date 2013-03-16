@@ -1,6 +1,6 @@
 {
 	"name": "luamin",
-	"version": "0.0.0",
+	"version": "0.0.0-alpha",
 	"description": "A Lua minifier written in JavaScript",
 	"homepage": "http://mths.be/luamin",
 	"main": "luamin.js",
@@ -34,8 +34,10 @@
 		"test": "tests"
 	},
 	"dependencies": {
-		"luaparse": "~0.0.3"
+		"luaparse": "~0.0.3",
 	},
-	"devDependencies": {},
+	"devDependencies": {
+		"istanbul": "~0.1.32"
+	},
 	"readmeFilename": "README.md"
 }
