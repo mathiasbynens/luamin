@@ -19,7 +19,7 @@ var parser = require('luaparse');
 var regexAlphaUnderscore = /[a-zA-Z_]/;
 var regexDigits = /[0-9]/;
 
-var Precedence = {
+var PRECEDENCE = {
 	// http://www.lua.org/manual/5.1/manual.html#2.5.6
 	'or': 1,
 	'and': 2,
@@ -101,7 +101,7 @@ var formatExpression = function(expression, precedence) {
 		// contains an expression with precedence < x,
 		// the inner expression must be wrapped in parens
 
-		currentPrecedence = Precedence[expression.operator];
+		currentPrecedence = PRECEDENCE[expression.operator];
 
 		result = formatExpression(expression.left, currentPrecedence);
 		result = joinStatements(result, expression.operator);
@@ -113,7 +113,7 @@ var formatExpression = function(expression, precedence) {
 
 	} else if (expressionType == 'UnaryExpression') {
 
-		currentPrecedence = Precedence['unary' + expression.operator];
+		currentPrecedence = PRECEDENCE['unary' + expression.operator];
 
 		result = joinStatements(expression.operator, formatExpression(expression.argument, currentPrecedence));
 

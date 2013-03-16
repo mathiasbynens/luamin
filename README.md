@@ -1,3 +1,3 @@
-# lua-minify, a Lua minifier written in JavaScript
+# luamin, a Lua minifier written in JavaScript
 
 Work in progress.
