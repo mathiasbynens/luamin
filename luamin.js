@@ -19,6 +19,18 @@ var parser = require('luaparse');
 var regexAlphaUnderscore = /[a-zA-Z_]/;
 var regexDigits = /[0-9]/;
 
+var Precedence = {
+	// http://www.lua.org/manual/5.1/manual.html#2.5.6
+	'or': 1,
+	'and': 2,
+	'<': 3, '>': 3, '<=': 3, '>=': 3, '~=': 3, '==': 3,
+	'..': 4,
+	'+': 5, '-': 5, // binary -
+	'*': 6, '/': 6, '%': 6,
+	'unarynot': 7, 'unary#': 7, 'unary-': 7, // unary -
+	'^': 8
+};
+
 var joinStatements = function(a, b, separator) {
 	separator || (separator = ' ');
 
@@ -34,7 +46,7 @@ var joinStatements = function(a, b, separator) {
 			return a + separator + b;
 		}
 	} else if (regexDigits.test(lastCharA)) {
-		if (firstCharB == '(' || !regexAlphaUnderscore.test(firstCharB)) {
+		if (firstCharB == '(' || (firstCharB != '.' && !regexAlphaUnderscore.test(firstCharB))) {
 			// e.g. `1(` or `1-`
 			return a + b;
 		} else {
@@ -42,7 +54,7 @@ var joinStatements = function(a, b, separator) {
 		}
 	} else if (lastCharA == '') {
 		return a + b;
-	} else if (!regexAlphaUnderscore.test(lastCharA) && regexDigits.test(firstCharB)) {
+	} else if (!regexAlphaUnderscore.test(lastCharA) && (firstCharB == '(' || regexDigits.test(firstCharB))) {
 		return a + b;
 	} else if (firstCharB == '(' || (lastCharA == firstCharB && lastCharA == '-')) {
 		return a + separator + b;
@@ -57,8 +69,13 @@ var obfuscateVariables = function(expression) {
 	return expression;
 };
 
-var formatExpression = function(expression) {
+var formatExpression = function(expression, precedence) {
+
+	precedence || (precedence = 0);
+
 	var result = '';
+	var tmp = '';
+	var currentPrecedence;
 
 	if (expression.type == 'Identifier') {
 
@@ -79,14 +96,30 @@ var formatExpression = function(expression) {
 		expression.type == 'BinaryExpression'
 	) {
 
-		result = joinStatements(result, formatExpression(expression.left));
+		// if an expression with precedence x
+		// contains an expression with precedence < x,
+		// the inner expression must be wrapped in parens
+
+		currentPrecedence = Precedence[expression.operator];
+
+		result = formatExpression(expression.left, currentPrecedence);
 		result = joinStatements(result, expression.operator);
 		result = joinStatements(result, formatExpression(expression.right));
 
+		if (currentPrecedence < precedence) {
+			result = '(' + result + ')';
+		}
+
 	} else if (expression.type == 'UnaryExpression') {
 
+		currentPrecedence = Precedence['unary' + expression.operator];
+
 		result = joinStatements(result, expression.operator);
-		result = joinStatements(result, formatExpression(expression.argument));
+		result = joinStatements(result, formatExpression(expression.argument, currentPrecedence));
+
+		if (currentPrecedence < precedence) {
+			result = '(' + result + ')';
+		}
 
 	} else if (expression.type == 'CallExpression') {
 

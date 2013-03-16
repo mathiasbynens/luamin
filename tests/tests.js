@@ -998,12 +998,12 @@ var testData = [
 	{
 		'description': 'NumericLiteral',
 		'original': 'a = 1 .. 3 .. -2',
-		'minified': 'a=1..3..-2'
+		'minified': 'a=1 ..3 ..-2'
 	},
 	{
 		'description': 'NumericLiteral + StringLiteral',
 		'original': 'a = 1 .. "bar"',
-		'minified': 'a=1.."bar"'
+		'minified': 'a=1 .."bar"'
 	},
 	{
 		'description': 'StringLiteral',
@@ -1226,7 +1226,6 @@ var testData = [
 	},
 
 	// Operators
-	// https://raw.github.com/oxyc/luaparse/master/test/spec/operators.js
 	{
 		'description': '',
 		'original': 'a = -10',
@@ -1330,7 +1329,7 @@ var testData = [
 	{
 		'description': '',
 		'original': 'a = 1 ^ 2; a = 1 .. 2',
-		'minified': 'a=1^2;a=1..2'
+		'minified': 'a=1^2;a=1 ..2'
 	},
 	{
 		'description': '',
@@ -1347,18 +1346,6 @@ var testData = [
 		'original': 'a = 1 + 2 - 3 * 4 / 5 ^ 6',
 		'minified': 'a=1+2-3*4/5^6'
 	},
-	// TODO: operator precedence
-	// http://www.lua.org/manual/5.1/manual.html#2.5.6
-	// {
-	// 	'description': '',
-	// 	'original': 'a = ((1 + 2) - 3) * (4 / (5 ^ 6))',
-	// 	'minified': 'a=(1+2-3)*4/5^6'
-	// },
-	// {
-	// 	'description': '',
-	// 	'original': 'a = (1 + (2 - (3 * (4 / (5 ^ ((6)))))))',
-	// 	'minified': 'a=1+2-(3*4/5^6)'
-	// },
 	{
 		'description': '',
 		'original': 'a = a + b - c',
@@ -1499,21 +1486,6 @@ var testData = [
 		'original': 'a = function() end or function() end',
 		'minified': 'a=function()end or function()end'
 	},
-	// {
-	// 	'description': '',
-	// 	'original': 'a = (((1 or false) and true) or false) == true',
-	// 	'minified': 'TODO: operator precedence'
-	// },
-	// {
-	// 	'description': '',
-	// 	'original': 'a = (((nil and true) or false) and true) == false',
-	// 	'minified': 'TODO: operator precedence'
-	// },
-	// {
-	// 	'description': '',
-	// 	'original': 'a = not ((true or false) and nil)',
-	// 	'minified': 'TODO: operator precedence'
-	// },
 	{
 		'description': '',
 		'original': 'a = true or false and nil',
@@ -1529,106 +1501,136 @@ var testData = [
 		'original': 'a = -3-1-5 == 0+0-9',
 		'minified': 'a=-3-1-5==0+0-9'
 	},
-	// {
-	// 	'description': '',
-	// 	'original': 'a = -2^2 == -4 and (-2)^2 == 4 and 2*2-3-1 == 0',
-	// 	'minified': 'TODO: operator precedence'
-	// },
+
+	// Operator precedence
+	// http://www.lua.org/manual/5.1/manual.html#2.5.6
+	{
+		'description': '',
+		'original': 'a = (1 + 2) * 3',
+		'minified': 'a=(1+2)*3'
+	},
+	{
+		'description': '',
+		'original': 'a = ((1 + 2) - 3) * (4 / (5 ^ 6))',
+		'minified': 'a=(1+2-3)*4/5^6'
+	},
+	{
+		'description': '',
+		'original': 'a = (1 + (2 - (3 * (4 / (5 ^ ((6)))))))',
+		'minified': 'a=1+2-3*4/5^6'
+	},
+	{
+		'description': '',
+		'original': 'a = (((1 or false) and true) or false) == true',
+		'minified': 'a=((1 or false)and true or false)==true'
+	},
+	{
+		'description': '',
+		'original': 'a = (((nil and true) or false) and true) == false',
+		'minified': 'a=((nil and true or false)and true)==false'
+	},
+	{
+		'description': '',
+		'original': 'a = not ((true or false) and nil)',
+		'minified': 'a=not((true or false)and nil)'
+	},
+	{
+		'description': '',
+		'original': 'a = -2^2 == -4 and (-2)^2 == 4 and 2*2-3-1 == 0',
+		'minified': 'a=-2^2==-4 and(-2)^2==4 and 2*2-3-1==0'
+	},
 	{
 		'description': '',
 		'original': 'a = 2*1+3/3 == 3 and 1+2 .. 3*1 == "33"',
-		'minified': 'a=2*1+3/3==3 and 1+2..3*1=="33"'
+		'minified': 'a=2*1+3/3==3 and 1+2 ..3*1=="33"'
 	},
-	// {
-	// 	'description': '',
-	// 	'original': 'a = not nil and 2 and not(2>3 or 3<2)',
-	// 	'minified': 'TODO: operator precedence'
-	// },
-	// {
-	// 	'description': '',
-	// 	'original': 'a = not(2+1 > 3*1) and "a".."b" > "a"',
-	// 	'minified': 'TODO: operator precedence'
-	// },
-
-	// Operator precedence: TODO
-	// {
-	// 	'description': 'Operator precedence',
-	// 	'original': '2 ^ (3 ^ 2)',
-	// 	'minified': '2^3^2'
-	// },
-	// {
-	// 	'description': 'Operator precedence',
-	// 	'original': '(2 ^ 3) * 4',
-	// 	'minified': '2^3^4'
-	// },
-	// {
-	// 	'description': 'Operator precedence',
-	// 	'original': '2 ^ (2 ^ 3)',
-	// 	'minified': '2^2^3'
-	// },
-	// {
-	// 	'description': 'Operator precedence',
-	// 	'original': '2 ^ (2 ^ (3 ^ 4))',
-	// 	'minified': '2^2^3^4'
-	// },
-	// {
-	// 	'description': 'Operator precedence',
-	// 	'original': '2 ^ (2 ^ (3 ^ 4)) + 1',
-	// 	'minified': '2^2^3^4+1'
-	// },
-	// {
-	// 	'description': 'Operator precedence',
-	// 	'original': '(1 * 2) / 3',
-	// 	'minified': '1*2/3'
-	// },
-	// {
-	// 	'description': 'Operator precedence',
-	// 	'original': '( 1 + ( 1 * 2 ) ) > 3',
-	// 	'minified': '1+1*2>3'
-	// },
-	// {
-	// 	'description': 'Operator precedence',
-	// 	'original': '(1 < 2) and (2 < 1)',
-	// 	'minified': '1<2 and 2<1'
-	// },
-	// {
-	// 	'description': 'Operator precedence',
-	// 	'original': '((1 / 2) + (4 * 2)) > 8',
-	// 	'minified': '1/2+4*2>8'
-	// },
-	// {
-	// 	'description': 'Operator precedence',
-	// 	'original': '(2 < 1) == true',
-	// 	'minified': '2<1==true'
-	// },
-	// {
-	// 	'description': 'Operator precedence',
-	// 	'original': '(2 < (1 + 1)) == true',
-	// 	'minified': '2<1+1==true'
-	// },
-	// {
-	// 	'description': 'Operator precedence',
-	// 	'original': '(not 1) + 1',
-	// 	'minified': 'not 1+1'
-	// },
-	// {
-	// 	'description': 'Operator precedence',
-	// 	'original': '(not (not (1)) + 1)',
-	// 	'minified': 'not not 1+1'
-	// },
-	// {
-	// 	'description': 'Operator precedence',
-	// 	'original': '1 + (#1)',
-	// 	'minified': '1+#1'
-	// },
-	// {
-	// 	'description': 'Operator precedence',
-	// 	'original': '- (x ^ 2)',
-	// 	'minified': '-x^2'
-	// },
+	{
+		'description': '',
+		'original': 'a = not nil and 2 and not(2 > 3 or 3 < 2)',
+		'minified': 'a=not nil and 2 and not(2>3 or 3<2)'
+	},
+	{
+		'description': '',
+		'original': 'a = not(2+1 > 3*1) and "a".."b" > "a"',
+		'minified': 'a=not(2+1>3*1)and"a".."b">"a"'
+	},
+	{
+		'description': 'Operator precedence',
+		'original': 'a = 2 ^ (3 ^ 2)',
+		'minified': 'a=2^3^2'
+	},
+	{
+		'description': 'Operator precedence',
+		'original': 'a = (2 ^ 3) * 4',
+		'minified': 'a=2^3*4'
+	},
+	{
+		'description': 'Operator precedence',
+		'original': 'a = 2 ^ (2 ^ 3)',
+		'minified': 'a=2^2^3'
+	},
+	{
+		'description': 'Operator precedence',
+		'original': 'a = 2 ^ (2 ^ (3 ^ 4))',
+		'minified': 'a=2^2^3^4'
+	},
+	{
+		'description': 'Operator precedence',
+		'original': 'a = 2 ^ (2 ^ (3 ^ 4)) + 1',
+		'minified': 'a=2^2^3^4+1'
+	},
+	{
+		'description': 'Operator precedence',
+		'original': 'a = (1 * 2) / 3',
+		'minified': 'a=1*2/3'
+	},
+	{
+		'description': 'Operator precedence',
+		'original': 'a = ( 1 + ( 1 * 2 ) ) > 3',
+		'minified': 'a=1+1*2>3'
+	},
+	{
+		'description': 'Operator precedence',
+		'original': 'a = (1 < 2) and (2 < 1)',
+		'minified': 'a=1<2 and 2<1'
+	},
+	{
+		'description': 'Operator precedence',
+		'original': 'a = ((1 / 2) + (4 * 2)) > 8',
+		'minified': 'a=1/2+4*2>8'
+	},
+	{
+		'description': 'Operator precedence',
+		'original': 'a = (2 < 1) == true',
+		'minified': 'a=2<1==true'
+	},
+	{
+		'description': 'Operator precedence',
+		'original': 'a = (2 < (1 + 1)) == true',
+		'minified': 'a=2<1+1==true'
+	},
+	{
+		'description': 'Operator precedence',
+		'original': 'a = (not 1) + 1',
+		'minified': 'a=not 1+1'
+	},
+	{
+		'description': 'Operator precedence',
+		'original': 'a = (not (not (1)) + 1)',
+		'minified': 'a=not not 1+1'
+	},
+	{
+		'description': 'Operator precedence',
+		'original': 'a = 1 + (#1)',
+		'minified': 'a=1+#1'
+	},
+	{
+		'description': 'Operator precedence',
+		'original': 'a = - (x ^ 2)',
+		'minified': 'a=-x^2'
+	},
 
 	// RepeatStatement
-	// https://raw.github.com/oxyc/luaparse/master/test/spec/repeat.js
 	{
 		'description': 'RepeatStatement',
 		'original': 'repeat until 0',
@@ -1681,7 +1683,6 @@ var testData = [
 	},
 
 	// ReturnStatement
-	// https://raw.github.com/oxyc/luaparse/master/test/spec/return.js
 	{
 		'description': 'ReturnStatement',
 		'original': 'return 1',
@@ -1709,7 +1710,6 @@ var testData = [
 	},
 
 	// Statements
-	// https://raw.github.com/oxyc/luaparse/master/test/spec/statements.js
 	{
 		'description': 'BreakStatement',
 		'original': 'break',
