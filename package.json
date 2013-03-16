@@ -34,7 +34,7 @@
 		"test": "tests"
 	},
 	"dependencies": {
-		"luaparse": "~0.0.3",
+		"luaparse": "~0.0.3"
 	},
 	"devDependencies": {
 		"istanbul": "~0.1.32"
