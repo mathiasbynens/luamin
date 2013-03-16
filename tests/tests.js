@@ -1227,277 +1227,277 @@ var testData = [
 
 	// Operators
 	{
-		'description': '',
+		'description': 'Operators',
 		'original': 'a = -10',
 		'minified': 'a=-10'
 	},
 	{
-		'description': '',
+		'description': 'Operators',
 		'original': 'a = -"foo"',
 		'minified': 'a=-"foo"'
 	},
 	{
-		'description': '',
+		'description': 'Operators',
 		'original': 'a = -a',
 		'minified': 'a=-a'
 	},
 	{
-		'description': '',
+		'description': 'Operators',
 		'original': 'a = -nil',
 		'minified': 'a=-nil'
 	},
 	{
-		'description': '',
+		'description': 'Operators',
 		'original': 'a = -true',
 		'minified': 'a=-true'
 	},
 	{
-		'description': '',
+		'description': 'Operators',
 		'original': 'a = -{}',
 		'minified': 'a=-{}'
 	},
 	{
-		'description': '',
+		'description': 'Operators',
 		'original': 'a = -function() end',
 		'minified': 'a=-function()end'
 	},
 	{
-		'description': '',
+		'description': 'Operators',
 		'original': 'a = -a()',
 		'minified': 'a=-a()'
 	},
 	{
-		'description': '',
+		'description': 'Operators',
 		'original': 'a = -(a)',
 		'minified': 'a=-a'
 	},
 	{
-		'description': '',
+		'description': 'Operators',
 		'original': 'a = not 10',
 		'minified': 'a=not 10'
 	},
 	{
-		'description': '',
+		'description': 'Operators',
 		'original': 'a = not "foo"',
 		'minified': 'a=not"foo"'
 	},
 	{
-		'description': '',
+		'description': 'Operators',
 		'original': 'a = not a',
 		'minified': 'a=not a'
 	},
 	{
-		'description': '',
+		'description': 'Operators',
 		'original': 'a = not nil',
 		'minified': 'a=not nil'
 	},
 	{
-		'description': '',
+		'description': 'Operators',
 		'original': 'a = not true',
 		'minified': 'a=not true'
 	},
 	{
-		'description': '',
+		'description': 'Operators',
 		'original': 'a = not {}',
 		'minified': 'a=not{}'
 	},
 	{
-		'description': '',
+		'description': 'Operators',
 		'original': 'a = not function() end',
 		'minified': 'a=not function()end'
 	},
 	{
-		'description': '',
+		'description': 'Operators',
 		'original': 'a = not a()',
 		'minified': 'a=not a()'
 	},
 	{
-		'description': '',
+		'description': 'Operators',
 		'original': 'a = not (a)',
 		'minified': 'a=not a'
 	},
 	{
-		'description': '',
+		'description': 'Operators',
 		'original': 'a = 1 + 2; a = 1 - 2',
 		'minified': 'a=1+2;a=1-2'
 	},
 	{
-		'description': '',
+		'description': 'Operators',
 		'original': 'a = 1 * 2; a = 1 / 2',
 		'minified': 'a=1*2;a=1/2'
 	},
 	{
-		'description': '',
+		'description': 'Operators',
 		'original': 'a = 1 ^ 2; a = 1 .. 2',
 		'minified': 'a=1^2;a=1 ..2'
 	},
 	{
-		'description': '',
+		'description': 'Operators',
 		'original': 'a = 1 + -2; a = 1 - -2',
 		'minified': 'a=1+-2;a=1- -2'
 	},
 	{
-		'description': '',
+		'description': 'Operators',
 		'original': 'a = 1 * not 2; a = 1 / not 2',
 		'minified': 'a=1*not 2;a=1/not 2'
 	},
 	{
-		'description': '',
+		'description': 'Operators',
 		'original': 'a = 1 + 2 - 3 * 4 / 5 ^ 6',
 		'minified': 'a=1+2-3*4/5^6'
 	},
 	{
-		'description': '',
+		'description': 'Operators',
 		'original': 'a = a + b - c',
 		'minified': 'a=a+b-c'
 	},
 	{
-		'description': '',
+		'description': 'Operators',
 		'original': 'a = "foo" + "bar"',
 		'minified': 'a="foo"+"bar"'
 	},
 	{
-		'description': '',
+		'description': 'Operators',
 		'original': 'a = "foo".."bar".."baz"',
 		'minified': 'a="foo".."bar".."baz"'
 	},
 	{
-		'description': '',
+		'description': 'Operators',
 		'original': 'a = true + false - nil',
 		'minified': 'a=true+false-nil'
 	},
 	{
-		'description': '',
+		'description': 'Operators',
 		'original': 'a = {} * {}',
 		'minified': 'a={}*{}'
 	},
 	{
-		'description': '',
+		'description': 'Operators',
 		'original': 'a = function() end / function() end',
 		'minified': 'a=function()end/function()end'
 	},
 	{
-		'description': '',
+		'description': 'Operators',
 		'original': 'a = a() ^ b()',
 		'minified': 'a=a()^b()'
 	},
 	{
-		'description': '',
+		'description': 'Operators',
 		'original': 'a = 1 == 2; a = 1 ~= 2',
 		'minified': 'a=1==2;a=1~=2'
 	},
 	{
-		'description': '',
+		'description': 'Operators',
 		'original': 'a = 1 < 2; a = 1 <= 2',
 		'minified': 'a=1<2;a=1<=2'
 	},
 	{
-		'description': '',
+		'description': 'Operators',
 		'original': 'a = 1 > 2; a = 1 >= 2',
 		'minified': 'a=1>2;a=1>=2'
 	},
 	{
-		'description': '',
+		'description': 'Operators',
 		'original': 'a = 1 < 2 < 3',
 		'minified': 'a=1<2<3'
 	},
 	{
-		'description': '',
+		'description': 'Operators',
 		'original': 'a = 1 >= 2 >= 3',
 		'minified': 'a=1>=2>=3'
 	},
 	{
-		'description': '',
+		'description': 'Operators',
 		'original': 'a = "foo" == "bar"',
 		'minified': 'a="foo"=="bar"'
 	},
 	{
-		'description': '',
+		'description': 'Operators',
 		'original': 'a = "foo" > "bar"',
 		'minified': 'a="foo">"bar"'
 	},
 	{
-		'description': '',
+		'description': 'Operators',
 		'original': 'a = a ~= b',
 		'minified': 'a=a~=b'
 	},
 	{
-		'description': '',
+		'description': 'Operators',
 		'original': 'a = true == false',
 		'minified': 'a=true==false'
 	},
 	{
-		'description': '',
+		'description': 'Operators',
 		'original': 'a = 1 and 2; a = 1 or 2',
 		'minified': 'a=1 and 2;a=1 or 2'
 	},
 	{
-		'description': '',
+		'description': 'Operators',
 		'original': 'a = 1 and 2 and 3',
 		'minified': 'a=1 and 2 and 3'
 	},
 	{
-		'description': '',
+		'description': 'Operators',
 		'original': 'a = 1 or 2 or 3',
 		'minified': 'a=1 or 2 or 3'
 	},
 	{
-		'description': '',
+		'description': 'Operators',
 		'original': 'a = 1 and 2 or 3',
 		'minified': 'a=1 and 2 or 3'
 	},
 	{
-		'description': '',
+		'description': 'Operators',
 		'original': 'a = a and b or c',
 		'minified': 'a=a and b or c'
 	},
 	{
-		'description': '',
+		'description': 'Operators',
 		'original': 'a = a() and (b)() or c.d',
 		'minified': 'a=a()and b()or c.d'
 	},
 	{
-		'description': '',
+		'description': 'Operators',
 		'original': 'a = "foo" and "bar"',
 		'minified': 'a="foo"and"bar"'
 	},
 	{
-		'description': '',
+		'description': 'Operators',
 		'original': 'a = true or false',
 		'minified': 'a=true or false'
 	},
 	{
-		'description': '',
+		'description': 'Operators',
 		'original': 'a = {} and {} or {}',
 		'minified': 'a={}and{}or{}'
 	},
 	{
-		'description': '',
+		'description': 'Operators',
 		'original': 'a = (1) and ("foo") or (nil)',
 		'minified': 'a=1 and"foo"or nil'
 	},
 	{
-		'description': '',
+		'description': 'Operators',
 		'original': 'a = function() end == function() end',
 		'minified': 'a=function()end==function()end'
 	},
 	{
-		'description': '',
+		'description': 'Operators',
 		'original': 'a = function() end or function() end',
 		'minified': 'a=function()end or function()end'
 	},
 	{
-		'description': '',
+		'description': 'Operators',
 		'original': 'a = true or false and nil',
 		'minified': 'a=true or false and nil'
 	},
 	{
-		'description': '',
+		'description': 'Operators',
 		'original': 'a = 2^-2 == 1/4 and -2^- -2 == - - -4',
 		'minified': 'a=2^-2==1/4 and-2^- -2==- - -4'
 	},
 	{
-		'description': '',
+		'description': 'Operators',
 		'original': 'a = -3-1-5 == 0+0-9',
 		'minified': 'a=-3-1-5==0+0-9'
 	},
@@ -1505,52 +1505,52 @@ var testData = [
 	// Operator precedence
 	// http://www.lua.org/manual/5.1/manual.html#2.5.6
 	{
-		'description': '',
+		'description': 'Operator precedence',
 		'original': 'a = (1 + 2) * 3',
 		'minified': 'a=(1+2)*3'
 	},
 	{
-		'description': '',
+		'description': 'Operator precedence',
 		'original': 'a = ((1 + 2) - 3) * (4 / (5 ^ 6))',
 		'minified': 'a=(1+2-3)*4/5^6'
 	},
 	{
-		'description': '',
+		'description': 'Operator precedence',
 		'original': 'a = (1 + (2 - (3 * (4 / (5 ^ ((6)))))))',
 		'minified': 'a=1+2-3*4/5^6'
 	},
 	{
-		'description': '',
+		'description': 'Operator precedence',
 		'original': 'a = (((1 or false) and true) or false) == true',
 		'minified': 'a=((1 or false)and true or false)==true'
 	},
 	{
-		'description': '',
+		'description': 'Operator precedence',
 		'original': 'a = (((nil and true) or false) and true) == false',
 		'minified': 'a=((nil and true or false)and true)==false'
 	},
 	{
-		'description': '',
+		'description': 'Operator precedence',
 		'original': 'a = not ((true or false) and nil)',
 		'minified': 'a=not((true or false)and nil)'
 	},
 	{
-		'description': '',
+		'description': 'Operator precedence',
 		'original': 'a = -2^2 == -4 and (-2)^2 == 4 and 2*2-3-1 == 0',
 		'minified': 'a=-2^2==-4 and(-2)^2==4 and 2*2-3-1==0'
 	},
 	{
-		'description': '',
+		'description': 'Operator precedence',
 		'original': 'a = 2*1+3/3 == 3 and 1+2 .. 3*1 == "33"',
 		'minified': 'a=2*1+3/3==3 and 1+2 ..3*1=="33"'
 	},
 	{
-		'description': '',
+		'description': 'Operator precedence',
 		'original': 'a = not nil and 2 and not(2 > 3 or 3 < 2)',
 		'minified': 'a=not nil and 2 and not(2>3 or 3<2)'
 	},
 	{
-		'description': '',
+		'description': 'Operator precedence',
 		'original': 'a = not(2+1 > 3*1) and "a".."b" > "a"',
 		'minified': 'a=not(2+1>3*1)and"a".."b">"a"'
 	},
@@ -1672,12 +1672,12 @@ var testData = [
 		'minified': 'repeat do end until 0'
 	},
 	{
-		'description': '',
+		'description': 'RepeatStatement',
 		'original': 'repeat do return end until 0',
 		'minified': 'repeat do return end until 0'
 	},
 	{
-		'description': '',
+		'description': 'RepeatStatement',
 		'original': 'repeat do break end until 0',
 		'minified': 'repeat do break end until 0'
 	},
