@@ -1,0 +1,41 @@
+{
+	"name": "luamin",
+	"version": "0.0.0",
+	"description": "A Lua minifier written in JavaScript",
+	"homepage": "http://mths.be/luamin",
+	"main": "luamin.js",
+	"keywords": [
+		"lua",
+		"minify",
+		"minifier"
+	],
+	"licenses": [
+		{
+			"type": "MIT",
+			"url": "http://mths.be/mit"
+		},
+		{
+			"type": "GPL",
+			"url": "http://mths.be/gpl"
+		}
+	],
+	"author": {
+		"name": "Mathias Bynens",
+		"web": "http://mathiasbynens.be/"
+	},
+	"bugs": {
+		"url": "https://github.com/mathiasbynens/luamin/issues"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/mathiasbynens/luamin.git"
+	},
+	"directories": {
+		"test": "tests"
+	},
+	"dependencies": {
+		"luaparse": "~0.0.3"
+	},
+	"devDependencies": {},
+	"readmeFilename": "README.md"
+}
