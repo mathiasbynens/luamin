@@ -2,23 +2,39 @@
 (function() {
 
 	var fs = require('fs');
-	var minify = require('../luamin.js').minify;
+	var luamin = require('../luamin.js');
+	var minify = luamin.minify;
 	var snippets = process.argv.splice(2);
-	var isFile = false;
+	var firstSnippet = snippets[0];
+	var isFile;
 
-	if (!snippets.length || /^(?:--help|-h)/.test(snippets[0])) {
-		console.log('Usage:\n\tluamin [snippet ...]\n\tluamin [-f | --file] [file ...]');
+	if (!snippets.length || /^(?:-h|--help)$/.test(firstSnippet)) {
+		console.log('luamin v%s - http://mths.be/luamin', luamin.version);
+		console.log('\nUsage:');
+		console.log('\tluamin [-c | --code] [snippet ...]');
+		console.log('\tluamin [-f | --file] [file ...]');
+		console.log('\tluamin [-v | --version]');
+		console.log('\tluamin [-h | --help]');
 		console.log('\nExamples:');
-		console.log('\tluamin \'a = ((1 + 2) - 3) * (4 / (5 ^ 6))\'');
+		console.log('\tluamin -c \'a = ((1 + 2) - 3) * (4 / (5 ^ 6))\'');
 		console.log('\tluamin -f foo.lua');
-		console.log('\tluamin --file bar.lua');
-		process.exit(1);
+		return process.exit(1);
 	}
 
-	if (/^(?:-f|--file)$/.test(snippets[0])) {
-		isFile = true;
-		snippets.shift();
+	if (/^(?:-v|--version)$/.test(firstSnippet)) {
+		console.log('v%s', luamin.version);
+		return process.exit(1);
 	}
+
+	if (/^(?:-f|--file)$/.test(firstSnippet)) {
+		isFile = true;
+	} else if (!/^(?:-c|--code)$/.test(firstSnippet)) {
+		console.log('Unrecognized option `%s`.', firstSnippet);
+		console.log('Try `luamin --help` for more information.');
+		return process.exit(1);
+	}
+
+	snippets.shift();
 
 	snippets.forEach(function(snippet) {
 		if (isFile) {
