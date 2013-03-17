@@ -1,0 +1,25 @@
+#!/usr/bin/env node
+(function() {
+
+	var fs = require('fs');
+	var minify = require('../luamin.js').minify;
+	var snippets = process.argv.splice(2);
+
+	if (!snippets.length || /^--help|-h/.test(snippets[0])) {
+		console.log('Usage:\n\tluamin [file|snippet]...');
+		console.log('\nExamples:');
+		console.log('\tluamin \'a = ((1 + 2) - 3) * (4 / (5 ^ 6))\'');
+		console.log('\tluamin foo.lua');
+		process.exit(1);
+	}
+
+	snippets.forEach(function(snippet) {
+		if (fs.existsSync(snippet)) {
+			// This is a file, not a code snippet
+			snippet = fs.readFileSync(snippet, 'utf-8');
+		}
+		var result = minify(snippet);
+		console.log(result);
+	});
+
+}());
