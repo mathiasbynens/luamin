@@ -161,7 +161,7 @@ var formatExpression = function(expression, precedence) {
 		}
 		result += ')';
 		result = joinStatements(result, formatStatementList(expression.body));
-		result += 'end';
+		result = joinStatements(result, 'end');
 
 	} else if (expressionType == 'TableConstructorExpression') {
 

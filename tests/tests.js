@@ -918,6 +918,11 @@ var testData = [
 		'original': 'function a() end; function a() end;',
 		'minified': 'function a()end;function a()end'
 	},
+	{
+		'description': 'FunctionDeclaration + WhileStatement',
+		'original': 'a = function() while true do end end',
+		'minified': 'a=function()while true do end end'
+	},
 
 	// Literals
 	{
