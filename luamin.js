@@ -206,7 +206,9 @@ var formatStatementList = function(body) {
 var formatStatement = function(statement) {
 	var result = '';
 
-	if (statement.type == 'AssignmentStatement') {
+	var statementType = statement.type;
+
+	if (statementType == 'AssignmentStatement') {
 
 		// left-hand side
 		result = statement.variables.map(function(variable) {
@@ -219,7 +221,7 @@ var formatStatement = function(statement) {
 			return formatExpression(init);
 		}).join(',');
 
-	} else if (statement.type == 'LocalStatement') {
+	} else if (statementType == 'LocalStatement') {
 
 		result = 'local ';
 
@@ -236,11 +238,11 @@ var formatStatement = function(statement) {
 			}).join(',');
 		}
 
-	} else if (statement.type == 'CallStatement') {
+	} else if (statementType == 'CallStatement') {
 
 		result = formatExpression(statement.expression);
 
-	} else if (statement.type == 'IfStatement') {
+	} else if (statementType == 'IfStatement') {
 
 		result = joinStatements('if', formatExpression(statement.clauses[0].condition));
 		result = joinStatements(result, 'then');
@@ -257,19 +259,19 @@ var formatStatement = function(statement) {
 		});
 		result = joinStatements(result, 'end');
 
-	} else if (statement.type == 'WhileStatement') {
+	} else if (statementType == 'WhileStatement') {
 
 		result = joinStatements('while', formatExpression(statement.condition));
 		result = joinStatements(result, 'do');
 		result = joinStatements(result, formatStatementList(statement.body));
 		result = joinStatements(result, 'end');
 
-	} else if (statement.type == 'DoStatement') {
+	} else if (statementType == 'DoStatement') {
 
 		result = joinStatements('do', formatStatementList(statement.body));
 		result = joinStatements(result, 'end');
 
-	} else if (statement.type == 'ReturnStatement') {
+	} else if (statementType == 'ReturnStatement') {
 
 		result = 'return';
 
@@ -279,17 +281,17 @@ var formatStatement = function(statement) {
 			result = joinStatements(result, formatExpression(args[index])) + (index < length ? ',' : '');
 		});
 
-	} else if (statement.type == 'BreakStatement') {
+	} else if (statementType == 'BreakStatement') {
 
 		result = 'break';
 
-	} else if (statement.type == 'RepeatStatement') {
+	} else if (statementType == 'RepeatStatement') {
 
 		result = joinStatements('repeat', formatStatementList(statement.body));
 		result = joinStatements(result, 'until');
 		result = joinStatements(result, formatExpression(statement.condition))
 
-	} else if (statement.type == 'FunctionDeclaration') {
+	} else if (statementType == 'FunctionDeclaration') {
 
 		obfuscateVariables(statement);
 
@@ -308,7 +310,7 @@ var formatStatement = function(statement) {
 		result = joinStatements(result, formatStatementList(statement.body));
 		result = joinStatements(result, 'end');
 
-	} else if (statement.type == 'ForGenericStatement') { // see also `ForNumericStatement`
+	} else if (statementType == 'ForGenericStatement') { // see also `ForNumericStatement`
 
 		obfuscateVariables(statement);
 		result = 'for ';
@@ -334,7 +336,7 @@ var formatStatement = function(statement) {
 		result = joinStatements(result, formatStatementList(statement.body));
 		result = joinStatements(result, 'end');
 
-	} else if (statement.type == 'ForNumericStatement') {
+	} else if (statementType == 'ForNumericStatement') {
 
 		result = 'for ' + statement.variable.name + '=';
 		result += formatExpression(statement.start) + ',' + formatExpression(statement.end);
@@ -347,17 +349,17 @@ var formatStatement = function(statement) {
 		result = joinStatements(result, formatStatementList(statement.body));
 		result = joinStatements(result, 'end');
 
-	} else if (statement.type == 'LabelStatement') {
+	} else if (statementType == 'LabelStatement') {
 
 		result = '::' + statement.label.name + '::';
 
-	} else if (statement.type == 'GotoStatement') {
+	} else if (statementType == 'GotoStatement') {
 
 		result = 'goto ' + statement.label.name;
 
 	} else {
 
-		throw Error('Unknown AST type: ' + statement.type);
+		throw Error('Unknown AST type: ' + statementType);
 
 	}
 
