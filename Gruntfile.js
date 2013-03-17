@@ -6,7 +6,7 @@ module.exports = function(grunt) {
 		},
 		'shell': {
 			'cover': {
-				'command': 'istanbul cover --report html --verbose --dir coverage <%= meta.testFile %>',
+				'command': 'istanbul cover --report "html" --verbose --dir "coverage" "<%= meta.testFile %>"',
 				'options': {
 					'stdout': true,
 					'stderr': true,
