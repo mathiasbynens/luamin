@@ -5,43 +5,84 @@
 	var luamin = require('../luamin.js');
 	var minify = luamin.minify;
 	var snippets = process.argv.splice(2);
-	var firstSnippet = snippets[0];
-	var isFile;
+	var option = snippets.shift();
+	var isFile = false;
+	var data = '';
+	var main = function() {
 
-	if (!snippets.length || /^(?:-h|--help)$/.test(firstSnippet)) {
-		console.log('luamin v%s - http://mths.be/luamin', luamin.version);
-		console.log('\nUsage:');
-		console.log('\tluamin [-c | --code] [snippet ...]');
-		console.log('\tluamin [-f | --file] [file ...]');
-		console.log('\tluamin [-v | --version]');
-		console.log('\tluamin [-h | --help]');
-		console.log('\nExamples:');
-		console.log('\tluamin -c \'a = ((1 + 2) - 3) * (4 / (5 ^ 6))\'');
-		console.log('\tluamin -f foo.lua');
-		return process.exit(1);
-	}
-
-	if (/^(?:-v|--version)$/.test(firstSnippet)) {
-		console.log('v%s', luamin.version);
-		return process.exit(1);
-	}
-
-	if (/^(?:-f|--file)$/.test(firstSnippet)) {
-		isFile = true;
-	} else if (!/^(?:-c|--code)$/.test(firstSnippet)) {
-		console.log('Unrecognized option `%s`.', firstSnippet);
-		console.log('Try `luamin --help` for more information.');
-		return process.exit(1);
-	}
-
-	snippets.shift();
-
-	snippets.forEach(function(snippet) {
-		if (isFile) {
-			snippet = fs.readFileSync(snippet, 'utf-8');
+		if (/^(?:-h|--help|undefined)$/.test(option)) {
+			console.log('luamin v%s - http://mths.be/luamin', luamin.version);
+			console.log('\nUsage:\n');
+			console.log('\tluamin [-c | --code] [snippet ...]');
+			console.log('\tluamin [-f | --file] [file ...]');
+			console.log('\tluamin [-v | --version]');
+			console.log('\tluamin [-h | --help]');
+			console.log('\nExamples:\n');
+			console.log('\tluamin -c \'a = ((1 + 2) - 3) * (4 / (5 ^ 6))\'');
+			console.log('\tluamin -f foo.lua');
+			console.log('\techo \'a = "foo" .. "bar"\' | luamin -c');
+			return process.exit(1);
 		}
-		var result = minify(snippet);
-		console.log(result);
+
+		if (/^(?:-v|--version)$/.test(option)) {
+			console.log('v%s', luamin.version);
+			return process.exit(1);
+		}
+
+		if (/^(?:-f|--file)$/.test(option)) {
+			isFile = true;
+		} else if (!/^(?:-c|--code)$/.test(option)) {
+			console.log('Unrecognized option `%s`.', option);
+			console.log('Try `luamin --help` for more information.');
+			return process.exit(1);
+		}
+
+		if (!snippets.length) {
+			console.log('Error: option `%s` requires an argument.', option);
+			console.log('Try `luamin --help` for more information.');
+			return process.exit(1);
+		}
+
+		snippets.forEach(function(snippet) {
+			var result;
+			if (isFile) {
+				try {
+					snippet = fs.readFileSync(snippet, 'utf-8');
+				} catch(error) {
+					console.log('Error: no such file. (`%s`)', snippet);
+					return process.exit(1);
+				}
+			}
+			try {
+				result = minify(snippet);
+				console.log(result);
+			} catch(error) {
+				console.log('Error: failed to minify. Make sure the Lua code is valid.');
+				console.log('If you think this is a bug in luamin, please report it:');
+				console.log('https://github.com/mathiasbynens/luamin/issues/new')
+				return process.exit(1);
+			}
+		});
+		// Return with exit status 0 outside of the `forEach` loop, in case there
+		// multiple snippets or files were passed in.
+		return process.exit(0);
+
+	};
+
+	var self = process.stdin;
+	self.on('readable', function() {
+		var chunk = this.read();
+		if (chunk == null) {
+			// handle without pipe
+			main();
+		} else {
+			data += chunk;
+		}
+	});
+	self.on('end', function() {
+		// handle pipe
+		snippets.unshift(data.trim());
+		main();
 	});
 
 }());
