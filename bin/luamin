@@ -7,7 +7,8 @@
 	var snippets = process.argv.splice(2);
 	var option = snippets.shift();
 	var isFile = false;
-	var data = '';
+	var stdin = process.stdin;
+	var data;
 	var main = function() {
 
 		if (/^(?:-h|--help|undefined)$/.test(option)) {
@@ -63,26 +64,25 @@
 				return process.exit(1);
 			}
 		});
-		// Return with exit status 0 outside of the `forEach` loop, in case there
+		// Return with exit status 0 outside of the `forEach` loop, in case
 		// multiple snippets or files were passed in.
 		return process.exit(0);
 
 	};
 
-	var self = process.stdin;
-	self.on('readable', function() {
-		var chunk = this.read();
-		if (chunk == null) {
-			// handle without pipe
-			main();
-		} else {
-			data += chunk;
-		}
-	});
-	self.on('end', function() {
-		// handle pipe
-		snippets.unshift(data.trim());
+	if (stdin.isTTY) {
+		// handle shell arguments
 		main();
-	});
+	} else {
+		// handle pipe
+		data = '';
+		stdin.on('readable', function() {
+			data += this.read();
+		});
+		stdin.on('end', function() {
+			snippets.unshift(data.trim());
+			main();
+		});
+	}
 
 }());
