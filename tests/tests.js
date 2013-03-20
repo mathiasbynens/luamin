@@ -1634,6 +1634,26 @@ var testData = [
 		'original': 'a = - (x ^ 2)',
 		'minified': 'a=-x^2'
 	},
+	{
+		'description': 'Operator precedence',
+		'original': 'a = (4 ^ (2 ^ 3))',
+		'minified': 'a=4^2^3'
+	},
+	{
+		'description': 'Operator precedence: right associativity',
+		'original': 'a = (((4) ^ 2) ^ 3)',
+		'minified': 'a=(4^2)^3'
+	},
+	{
+		'description': 'Operator precedence',
+		'original': 'a = ("a" .. ("b" .. "c"))',
+		'minified': 'a="a".."b".."c"'
+	},
+	{
+		'description': 'Operator precedence: right associativity',
+		'original': 'a = ((("a") .. "b") .. "c")',
+		'minified': 'a=("a".."b").."c"'
+	},
 
 	// RepeatStatement
 	{

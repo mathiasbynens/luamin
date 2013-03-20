@@ -20,15 +20,16 @@ var regexAlphaUnderscore = /[a-zA-Z_]/;
 var regexDigits = /[0-9]/;
 
 var PRECEDENCE = {
-	// http://www.lua.org/manual/5.1/manual.html#2.5.6
+	// http://www.lua.org/manual/5.2/manual.html#3.4.7
+	// http://www.lua.org/source/5.2/lparser.c.html#priority
 	'or': 1,
 	'and': 2,
 	'<': 3, '>': 3, '<=': 3, '>=': 3, '~=': 3, '==': 3,
-	'..': 4,
-	'+': 5, '-': 5, // binary -
-	'*': 6, '/': 6, '%': 6,
-	'unarynot': 7, 'unary#': 7, 'unary-': 7, // unary -
-	'^': 8
+	'..': 5,
+	'+': 6, '-': 6, // binary -
+	'*': 7, '/': 7, '%': 7,
+	'unarynot': 8, 'unary#': 8, 'unary-': 8, // unary -
+	'^': 10
 };
 
 var joinStatements = function(a, b, separator) {
@@ -75,6 +76,7 @@ var formatExpression = function(expression, precedence) {
 
 	var result = '';
 	var currentPrecedence;
+	var operator;
 
 	var expressionType = expression.type;
 
@@ -101,11 +103,16 @@ var formatExpression = function(expression, precedence) {
 		// contains an expression with precedence < x,
 		// the inner expression must be wrapped in parens
 
-		currentPrecedence = PRECEDENCE[expression.operator];
+		operator = expression.operator;
+		currentPrecedence = PRECEDENCE[operator];
 
 		result = formatExpression(expression.left, currentPrecedence);
-		result = joinStatements(result, expression.operator);
+		result = joinStatements(result, operator);
 		result = joinStatements(result, formatExpression(expression.right));
+
+		if (operator == '^' || operator == '..') {
+			currentPrecedence--;
+		}
 
 		if (currentPrecedence < precedence) {
 			result = '(' + result + ')';
@@ -113,9 +120,10 @@ var formatExpression = function(expression, precedence) {
 
 	} else if (expressionType == 'UnaryExpression') {
 
-		currentPrecedence = PRECEDENCE['unary' + expression.operator];
+		operator = expression.operator;
+		currentPrecedence = PRECEDENCE['unary' + operator];
 
-		result = joinStatements(expression.operator, formatExpression(expression.argument, currentPrecedence));
+		result = joinStatements(operator, formatExpression(expression.argument, currentPrecedence));
 
 		if (currentPrecedence < precedence) {
 			result = '(' + result + ')';
