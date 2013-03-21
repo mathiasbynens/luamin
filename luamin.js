@@ -14,7 +14,10 @@ var log = function() {
 };
 // </temporary-stuff>
 
-var parser = require('luaparse');
+var luaparse = require('luaparse');
+luaparse.defaultOptions.comments = false;
+luaparse.defaultOptions.scope = true;
+var parse = luaparse.parse;
 
 var regexAlphaUnderscore = /[a-zA-Z_]/;
 var regexDigits = /[0-9]/;
@@ -30,6 +33,44 @@ var PRECEDENCE = {
 	'*': 7, '/': 7, '%': 7,
 	'unarynot': 8, 'unary#': 8, 'unary-': 8, // unary -
 	'^': 10
+};
+
+var IDENTIFIER_PARTS = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a',
+	'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p',
+	'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E',
+	'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T',
+	'U', 'V', 'W', 'X', 'Y', 'Z', '_'];
+var IDENTIFIER_PARTS_MAX_POS = IDENTIFIER_PARTS.length - 1;
+
+var generateZeroes = function(length) {
+	return Array(length + 1).join('0');
+};
+
+var currentIdentifier;
+var identifierMap;
+var hasOwnProperty = {}.hasOwnProperty;
+var generateIdentifier = function(originalName) {
+	if (hasOwnProperty.call(identifierMap, originalName)) {
+		return identifierMap[originalName];
+	}
+	var length = currentIdentifier.length;
+	var position = length - 1;
+	var character;
+	var index;
+	while (position >= 0) {
+		character = currentIdentifier.charAt(position);
+		index = IDENTIFIER_PARTS.indexOf(character);
+		if (index != IDENTIFIER_PARTS_MAX_POS) {
+			currentIdentifier = currentIdentifier.substring(0, position) +
+				IDENTIFIER_PARTS[index + 1] + generateZeroes(length - (position + 1));
+				identifierMap[originalName] = currentIdentifier;
+			return currentIdentifier;
+		}
+		--position;
+	}
+	currentIdentifier = 'a' + generateZeroes(length);
+	identifierMap[originalName] = currentIdentifier;
+	return currentIdentifier;
 };
 
 var joinStatements = function(a, b, separator) {
@@ -64,12 +105,6 @@ var joinStatements = function(a, b, separator) {
 	}
 };
 
-var obfuscateVariables = function(expression) {
-	// TODO
-	// both in expression.body and expression.parameters
-	return expression;
-};
-
 var formatExpression = function(expression, precedence) {
 
 	precedence || (precedence = 0);
@@ -82,7 +117,7 @@ var formatExpression = function(expression, precedence) {
 
 	if (expressionType == 'Identifier') {
 
-		result += expression.name;
+		result += expression.isLocal ? generateIdentifier(expression.name) : expression.name;
 
 	} else if (
 		expressionType == 'NumericLiteral' ||
@@ -158,8 +193,6 @@ var formatExpression = function(expression, precedence) {
 
 	} else if (expressionType == 'FunctionDeclaration') {
 
-		obfuscateVariables(expression);
-
 		result += 'function(';
 		if (expression.parameters.length) {
 			result += expression.parameters.map(function(parameter) {
@@ -194,8 +227,7 @@ var formatExpression = function(expression, precedence) {
 
 	} else {
 
-		log('Unknown expression type:', expression);
-		throw Error('Unknown expression type');
+		throw Error('Unknown expression type: ' + expressionType);
 
 	}
 
@@ -204,7 +236,6 @@ var formatExpression = function(expression, precedence) {
 
 var formatStatementList = function(body) {
 	var result = '';
-	obfuscateVariables(body);
 	body.forEach(function(statement) {
 		result = joinStatements(result, formatStatement(statement), ';');
 	});
@@ -235,7 +266,8 @@ var formatStatement = function(statement) {
 
 		// left-hand side
 		result += statement.variables.map(function(variable) {
-			return variable.name;
+			// Variables in a `LocalStatement` are always local, duh
+			return generateIdentifier(variable.name);
 		}).join(',');
 
 		// right-hand side
@@ -301,9 +333,7 @@ var formatStatement = function(statement) {
 
 	} else if (statementType == 'FunctionDeclaration') {
 
-		obfuscateVariables(statement);
-
-		result = (statement.local ? 'local ' : '') + 'function ';
+		result = (statement.isLocal ? 'local ' : '') + 'function ';
 		result += formatExpression(statement.identifier);
 		result += '(';
 
@@ -320,13 +350,13 @@ var formatStatement = function(statement) {
 
 	} else if (statementType == 'ForGenericStatement') { // see also `ForNumericStatement`
 
-		obfuscateVariables(statement);
 		result = 'for ';
 
 		var variables = statement.variables;
 		var length = variables.length - 1;
 		variables.forEach(function(variable, index) {
-			result += variable.name + (index < length ? ',' : '');
+			// The variables in a `ForGenericStatement` are always local
+			result += generateIdentifier(variable.name) + (index < length ? ',' : '');
 		});
 
 		result += ' in';
@@ -346,7 +376,8 @@ var formatStatement = function(statement) {
 
 	} else if (statementType == 'ForNumericStatement') {
 
-		result = 'for ' + statement.variable.name + '=';
+		// The variables in a `ForNumericStatement` are always local
+		result = 'for ' + generateIdentifier(statement.variable.name) + '=';
 		result += formatExpression(statement.start) + ',' + formatExpression(statement.end);
 
 		if (statement.step) {
@@ -359,11 +390,13 @@ var formatStatement = function(statement) {
 
 	} else if (statementType == 'LabelStatement') {
 
-		result = '::' + statement.label.name + '::';
+		// The identifier names in a `LabelStatement` can always safely be renamed
+		result = '::' + generateIdentifier(statement.label.name) + '::';
 
 	} else if (statementType == 'GotoStatement') {
 
-		result = 'goto ' + statement.label.name;
+		// The identifier names in a `GotoStatement` can always safely be renamed
+		result = 'goto ' + generateIdentifier(statement.label.name);
 
 	} else {
 
@@ -375,11 +408,20 @@ var formatStatement = function(statement) {
 };
 
 var minify = function(code) {
-	var ast = parser.parse(code);
+	var ast = parse(code);
 	//log(ast);
-	var output = formatStatementList(ast.body);
-	//log(output);
-	return output;
+
+	// (Re)set temporary identifier values
+	identifierMap = {};
+	// This is a shortcut to help generate the first identifier (`a`) faster
+	currentIdentifier = '9';
+
+	// Make sure global variable names aren't renamed
+	ast.globals.forEach(function(name) {
+		identifierMap[name] = name;
+	});
+
+	return formatStatementList(ast.body);
 };
 
 module.exports = {
