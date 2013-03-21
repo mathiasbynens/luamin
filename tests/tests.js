@@ -166,17 +166,17 @@
 			},
 			{
 				'description': 'IfStatement + LocalStatement',
-				'original': 'if 1 then local a end',
+				'original': 'if 1 then local foo end',
 				'minified': 'if 1 then local a end'
 			},
 			{
 				'description': 'IfStatement + LocalStatement',
-				'original': 'if 1 then local a local b end',
+				'original': 'if 1 then local foo local bar end',
 				'minified': 'if 1 then local a;local b end'
 			},
 			{
 				'description': 'IfStatement + LocalStatement',
-				'original': 'if 1 then local a; local b; end',
+				'original': 'if 1 then local foo; local bar; end',
 				'minified': 'if 1 then local a;local b end'
 			},
 			{
@@ -191,22 +191,22 @@
 			},
 			{
 				'description': 'IfStatement + ElseClause + LocalStatement',
-				'original': 'if 1 then local a else local b end',
+				'original': 'if 1 then local foo else local bar end',
 				'minified': 'if 1 then local a else local b end'
 			},
 			{
 				'description': 'IfStatement + ElseClause + LocalStatement',
-				'original': 'if 1 then local a; else local b; end',
+				'original': 'if 1 then local foo; else local bar; end',
 				'minified': 'if 1 then local a else local b end'
 			},
 			{
 				'description': 'IfStatement + ElseifClause + LocalStatement',
-				'original': 'if 1 then local a elseif 2 then local b end',
+				'original': 'if 1 then local foo elseif 2 then local bar end',
 				'minified': 'if 1 then local a elseif 2 then local b end'
 			},
 			{
 				'description': 'IfStatement + ElseifClause + LocalStatement',
-				'original': 'if 1 then local a; elseif 2 then local b; end',
+				'original': 'if 1 then local foo; elseif 2 then local bar; end',
 				'minified': 'if 1 then local a elseif 2 then local b end'
 			},
 			{
@@ -235,17 +235,17 @@
 		'DoStatement': [
 			{
 				'description': 'DoStatement + LocalStatement',
-				'original': 'do local a local b end',
+				'original': 'do local foo local bar end',
 				'minified': 'do local a;local b end'
 			},
 			{
 				'description': 'DoStatement + LocalStatement',
-				'original': 'do local a; local b; end',
+				'original': 'do local foo; local bar; end',
 				'minified': 'do local a;local b end'
 			},
 			{
 				'description': 'DoStatement + LocalStatement',
-				'original': 'do local a = 1 end',
+				'original': 'do local foo = 1 end',
 				'minified': 'do local a=1 end'
 			},
 			{
@@ -1805,13 +1805,18 @@
 			{
 				'description': 'LabelStatement',
 				'original': '::foo::',
-				'minified': '::foo::'
+				'minified': '::a::'
 			},
 			{
 				'description': 'GotoStatement',
 				'original': 'goto foo',
-				'minified': 'goto foo'
-			}
+				'minified': 'goto a'
+			},
+			{
+				'description': 'LabelStatement + GotoStatement',
+				'original': 'for x = 1, 10 do print(x) goto done end ::done::',
+				'minified': 'for a=1,10 do print(a)goto b end::b::'
+			},
 		],
 
 		// TableConstructorExpressions
@@ -1957,7 +1962,14 @@
 			}
 		],
 
-		// TODO: rename local variables
+		// Rename local variables
+		'Variable name shortening': [
+			{
+				'description': 'WhileStatement',
+				'original': 'local aa, bb, cc, dd, ee, ff, gg, hh, ii, jj, kk, ll, mm, nn, oo, pp, qq, rr, ss, tt, uu, vv, ww, xx, yy, zz, AA, BB, CC, DD, EE, FF, GG, HH, II, JJ, KK, LL, MM, NN, OO, PP, QQ, RR, SS, TT, UU, VV, WW, XX, YY, ZZ, aaa, bbb, ccc, ddd, eee, fff, ggg, hhh, iii, jjj, kkk, lll, mmm, nnn, ooo, ppp, qqq, rrr, sss, ttt, uuu, vvv, www, xxx, yyy, zzz = 1 print(dontrenameme)',
+				'minified': 'local a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z,A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z,_,a0,a1,a2,a3,a4,a5,a6,a7,a8,a9,aa,ab,ac,ad,ae,af,ag,ah,ai,aj,ak,al,am,an,ao=1;print(dontrenameme)'
+			}
+		],
 
 		// Miscellaneous
 		'Miscellaneous': [
