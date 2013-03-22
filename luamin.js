@@ -4,15 +4,14 @@
 	var freeExports = typeof exports == 'object' && exports;
 
 	/** Detect free variable `module` */
-	var freeModule = typeof module == 'object' && module && module.exports == freeExports && module;
+	var freeModule = typeof module == 'object' && module &&
+		module.exports == freeExports && module;
 
 	/** Detect free variable `global` and use it as `root` */
 	var freeGlobal = typeof global == 'object' && global;
 	if (freeGlobal.global === freeGlobal) {
 		root = freeGlobal;
 	}
-
-	var key;
 
 	var luaparse = root.luaparse || require('luaparse');
 	luaparse.defaultOptions.comments = false;
@@ -117,7 +116,7 @@
 
 		if (expressionType == 'Identifier') {
 
-			result += expression.isLocal ? generateIdentifier(expression.name) : expression.name;
+			result = expression.isLocal ? generateIdentifier(expression.name) : expression.name;
 
 		} else if (
 			expressionType == 'NumericLiteral' ||
@@ -127,17 +126,16 @@
 			expressionType == 'VarargLiteral'
 		) {
 
-			result += expression.raw;
+			result = expression.raw;
 
 		} else if (
 			expressionType == 'LogicalExpression' ||
 			expressionType == 'BinaryExpression'
 		) {
 
-			// if an expression with precedence x
+			// If an expression with precedence x
 			// contains an expression with precedence < x,
-			// the inner expression must be wrapped in parens
-
+			// the inner expression must be wrapped in parens.
 			operator = expression.operator;
 			currentPrecedence = PRECEDENCE[operator];
 
@@ -166,8 +164,7 @@
 
 		} else if (expressionType == 'CallExpression') {
 
-			result += formatExpression(expression.base);
-			result += '(';
+			result = formatExpression(expression.base) + '(';
 
 			result += expression.arguments.map(function(argument) {
 				return formatExpression(argument);
@@ -176,24 +173,23 @@
 
 		} else if (expressionType == 'TableCallExpression') { // e.g. `foo{1,2,3}`
 
-			result += formatExpression(expression.base);
-			result += formatExpression(expression.arguments);
+			result = formatExpression(expression.base) + formatExpression(expression.arguments);
 
 		} else if (expressionType == 'StringCallExpression') { // e.g. `foo'lol'`
 
-			result += formatExpression(expression.base) + formatExpression(expression.argument);
+			result = formatExpression(expression.base) + formatExpression(expression.argument);
 
 		} else if (expressionType == 'IndexExpression') { // e.g. `x[2]`
 
-			result += formatExpression(expression.base) + '[' + formatExpression(expression.index) + ']';
+			result = formatExpression(expression.base) + '[' + formatExpression(expression.index) + ']';
 
 		} else if (expressionType == 'MemberExpression') { // e.g. `x:sub(1, 1)`
 
-			result += formatExpression(expression.base) + expression.indexer + formatExpression(expression.identifier);
+			result = formatExpression(expression.base) + expression.indexer + formatExpression(expression.identifier);
 
 		} else if (expressionType == 'FunctionDeclaration') {
 
-			result += 'function(';
+			result = 'function(';
 			if (expression.parameters.length) {
 				result += expression.parameters.map(function(parameter) {
 					// `Identifier`s have a `name`, `VarargLiteral`s have a `value`
@@ -206,7 +202,7 @@
 
 		} else if (expressionType == 'TableConstructorExpression') {
 
-			result += '{';
+			result = '{';
 
 			var fields = expression.fields;
 			var length = fields.length - 1;
@@ -244,7 +240,6 @@
 
 	var formatStatement = function(statement) {
 		var result = '';
-
 		var statementType = statement.type;
 
 		if (statementType == 'AssignmentStatement') {
@@ -409,7 +404,6 @@
 
 	var minify = function(code) {
 		var ast = parse(code);
-		//log(ast);
 
 		// (Re)set temporary identifier values
 		identifierMap = {};
@@ -424,35 +418,28 @@
 		return formatStatementList(ast.body);
 	};
 
-	// expose luamin
+	// Expose luamin
 	var luamin = {
 		'version': '0.0.0-alpha',
 		'minify': minify
 	};
 
-	// some AMD build optimizers, like r.js, check for specific condition patterns like the following:
+	// Some AMD build optimizers, like r.js, check for specific condition patterns like the following:
 	if (typeof define == 'function' && typeof define.amd == 'object' && define.amd) {
-		// define as an anonymous module so, through path mapping, it can be
-		// referenced as the "underscore" module
 		define(function() {
 			return luamin;
 		});
 	}
-	// check for `exports` after `define` in case a build optimizer adds an `exports` object
+	// Check for `exports` after `define` in case a build optimizer adds an `exports` object
 	else if (freeExports && !freeExports.nodeType) {
-		// in Node.js or RingoJS v0.8.0+
-		if (freeModule) {
+		if (freeModule) { // in Node.js or RingoJS v0.8.0+
 			freeModule.exports = luamin;
-		}
-		// in Narwhal or RingoJS v0.7.0-
-		else {
-			for (key in luamin) {
+		} else { // in Narwhal or RingoJS v0.7.0-
+			for (var key in luamin) {
 				luamin.hasOwnProperty(key) && (freeExports[key] = luamin[key]);
 			}
 		}
-	}
-	else {
-		// in a browser or Rhino
+	} else { // in Rhino or a web browser
 		root.luamin = luamin;
 	}
 
