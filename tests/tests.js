@@ -1,4 +1,4 @@
-;(function(root, undefined) {
+;(function(root) {
 	'use strict';
 
 	/** Use a single "load" function */

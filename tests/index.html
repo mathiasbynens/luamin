@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>luamin test suite</title>
+		<link rel="stylesheet" href="../node_modules/qunitjs/qunit/qunit.css">
+	</head>
+	<body>
+		<div id="qunit"></div>
+		<script src="../node_modules/qunitjs/qunit/qunit.js"></script>
+		<script src="../node_modules/luaparse/lib/luaparse.js"></script>
+		<script src="../luamin.js"></script>
+		<script>
+			// populate `QUnit.urlParams`
+			QUnit.urlParams.norequire = /[?&]norequire=true(?:&|$)/.test(location.search);
+
+			// load tests.js if not using require.js
+			document.write(QUnit.urlParams.norequire
+				? '<script src="tests.js"><\/script>'
+				: '<script src="../node_modules/requirejs/require.js"><\/script>'
+			);
+		</script>
+		<script>
+			window.require && require({
+				'baseUrl': '../node_modules/requirejs/',
+				'urlArgs': 't=' + (+new Date),
+				'paths': {
+					'luaparse': '../luaparse/lib/luaparse',
+					'luamin': '../../luamin'
+				}
+			},
+			['luaparse', 'luamin'], function(luaparse, luamin) {
+				require(['tests.js']);
+			});
+		</script>
+	</body>
+</html>
