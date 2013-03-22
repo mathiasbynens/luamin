@@ -1816,7 +1816,7 @@
 				'description': 'LabelStatement + GotoStatement',
 				'original': 'for x = 1, 10 do print(x) goto done end ::done::',
 				'minified': 'for a=1,10 do print(a)goto b end::b::'
-			},
+			}
 		],
 
 		// TableConstructorExpressions
@@ -1982,13 +1982,30 @@
 
 	};
 
+	function forEach(array, fn) {
+		var index = -1;
+		var length = array.length;
+		while (++index < length) {
+			fn(array[index]);
+		}
+	}
+
+	function forOwn(object, fn) {
+		var key;
+		for (key in object) {
+			if (object.hasOwnProperty(key)) {
+				fn(object[key], key);
+			}
+		}
+	}
+
 	// explicitly call `QUnit.module()` instead of `module()`
 	// in case we are in a CLI environment
 
 	QUnit.module('luamin');
-	Object.keys(data).forEach(function(groupName) {
+	forOwn(data, function(items, groupName) {
 		test(groupName, function() {
-			data[groupName].forEach(function(item) {
+			forEach(items, function(item) {
 				equal(
 					minify(item.original),
 					item.minified,

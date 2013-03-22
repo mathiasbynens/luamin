@@ -52,6 +52,17 @@
 		}
 	}
 
+	function indexOf(array, value) {
+		var index = -1;
+		var length = array.length;
+		while (++index < length) {
+			if (array[index] === value) {
+				return index;
+			}
+		}
+		//return -1; // not needed in this case!
+	}
+
 	var generateZeroes = function(length) {
 		var zero = '0';
 		var result = '';
@@ -85,7 +96,7 @@
 		var index;
 		while (position >= 0) {
 			character = currentIdentifier.charAt(position);
-			index = IDENTIFIER_PARTS.indexOf(character);
+			index = indexOf(IDENTIFIER_PARTS, character);
 			if (index != IDENTIFIER_PARTS_MAX) {
 				currentIdentifier = currentIdentifier.substring(0, position) +
 					IDENTIFIER_PARTS[index + 1] + generateZeroes(length - (position + 1));
@@ -214,7 +225,7 @@
 
 			result = formatExpression(expression.base) + '[' + formatExpression(expression.index) + ']';
 
-		} else if (expressionType == 'MemberExpression') { // e.g. `x:sub(1, 1)`
+		} else if (expressionType == 'MemberExpression') { // e.g. `x.sub(1, 1)` or `x:sub(1, 1)`
 
 			result = formatExpression(expression.base) + expression.indexer + formatExpression(expression.identifier);
 
