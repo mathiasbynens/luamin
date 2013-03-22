@@ -1,17 +1,19 @@
 (function(root) {
 
-	/** Detect free variable `exports` */
+	// Detect free variables `exports`
 	var freeExports = typeof exports == 'object' && exports;
 
-	/** Detect free variable `module` */
+	// Detect free variable `module`
 	var freeModule = typeof module == 'object' && module &&
 		module.exports == freeExports && module;
 
-	/** Detect free variable `global` and use it as `root` */
+	// Detect free variable `global` and use it as `root`
 	var freeGlobal = typeof global == 'object' && global;
 	if (freeGlobal.global === freeGlobal) {
 		root = freeGlobal;
 	}
+
+	/*--------------------------------------------------------------------------*/
 
 	var luaparse = root.luaparse || require('luaparse');
 	luaparse.defaultOptions.comments = false;
@@ -39,10 +41,35 @@
 		'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E',
 		'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T',
 		'U', 'V', 'W', 'X', 'Y', 'Z', '_'];
-	var IDENTIFIER_PARTS_MAX_POS = IDENTIFIER_PARTS.length - 1;
+	var IDENTIFIER_PARTS_MAX = IDENTIFIER_PARTS.length - 1;
+
+	function each(array, fn) {
+		var index = -1;
+		var length = array.length;
+		var max = length - 1;
+		while (++index < length) {
+			fn(array[index], index < max);
+		}
+	}
 
 	var generateZeroes = function(length) {
-		return Array(length + 1).join('0');
+		var zero = '0';
+		var result = '';
+		if (length < 1) {
+			return result;
+		}
+		if (length == 1) {
+			return zero;
+		}
+		while (length) {
+			if (length & 1) {
+				result += zero;
+			}
+			if (length >>= 1) {
+				zero += zero;
+			}
+		}
+		return result;
 	};
 
 	var currentIdentifier;
@@ -59,7 +86,7 @@
 		while (position >= 0) {
 			character = currentIdentifier.charAt(position);
 			index = IDENTIFIER_PARTS.indexOf(character);
-			if (index != IDENTIFIER_PARTS_MAX_POS) {
+			if (index != IDENTIFIER_PARTS_MAX) {
 				currentIdentifier = currentIdentifier.substring(0, position) +
 					IDENTIFIER_PARTS[index + 1] + generateZeroes(length - (position + 1));
 					identifierMap[originalName] = currentIdentifier;
@@ -71,6 +98,8 @@
 		identifierMap[originalName] = currentIdentifier;
 		return currentIdentifier;
 	};
+
+	/*--------------------------------------------------------------------------*/
 
 	var joinStatements = function(a, b, separator) {
 		separator || (separator = ' ');
@@ -119,10 +148,10 @@
 			result = expression.isLocal ? generateIdentifier(expression.name) : expression.name;
 
 		} else if (
+			expressionType == 'StringLiteral' ||
 			expressionType == 'NumericLiteral' ||
 			expressionType == 'BooleanLiteral' ||
 			expressionType == 'NilLiteral' ||
-			expressionType == 'StringLiteral' ||
 			expressionType == 'VarargLiteral'
 		) {
 
@@ -165,10 +194,12 @@
 		} else if (expressionType == 'CallExpression') {
 
 			result = formatExpression(expression.base) + '(';
-
-			result += expression.arguments.map(function(argument) {
-				return formatExpression(argument);
-			}).join(',');
+			each(expression.arguments, function(argument, needsComma) {
+				result += formatExpression(argument);
+				if (needsComma) {
+					result += ',';
+				}
+			});
 			result += ')';
 
 		} else if (expressionType == 'TableCallExpression') { // e.g. `foo{1,2,3}`
@@ -191,10 +222,13 @@
 
 			result = 'function(';
 			if (expression.parameters.length) {
-				result += expression.parameters.map(function(parameter) {
+				each(expression.parameters, function(parameter, needsComma) {
 					// `Identifier`s have a `name`, `VarargLiteral`s have a `value`
-					return parameter.name || parameter.value;
-				}).join(',');
+					result += parameter.name || parameter.value;
+					if (needsComma) {
+						result += ',';
+					}
+				});
 			}
 			result += ')';
 			result = joinStatements(result, formatStatementList(expression.body));
@@ -204,9 +238,7 @@
 
 			result = '{';
 
-			var fields = expression.fields;
-			var length = fields.length - 1;
-			fields.forEach(function(field, index) {
+			each(expression.fields, function(field, needsComma) {
 				if (field.type == 'TableKey') {
 					result += '[' + formatExpression(field.key) + ']=' + formatExpression(field.value);
 				} else if (field.type == 'TableValue') {
@@ -214,7 +246,7 @@
 				} else if (field.type == 'TableKeyString') {
 					result += formatExpression(field.key) + '=' + formatExpression(field.value);
 				}
-				if (index < length) {
+				if (needsComma) {
 					result += ',';
 				}
 			});
@@ -232,7 +264,7 @@
 
 	var formatStatementList = function(body) {
 		var result = '';
-		body.forEach(function(statement) {
+		each(body, function(statement) {
 			result = joinStatements(result, formatStatement(statement), ';');
 		});
 		return result;
@@ -245,32 +277,44 @@
 		if (statementType == 'AssignmentStatement') {
 
 			// left-hand side
-			result = statement.variables.map(function(variable) {
-				return formatExpression(variable);
-			}).join(',');
+			each(statement.variables, function(variable, needsComma) {
+				result += formatExpression(variable);
+				if (needsComma) {
+					result += ',';
+				}
+			});
 
 			// right-hand side
 			result += '=';
-			result += statement.init.map(function(init) {
-				return formatExpression(init);
-			}).join(',');
+			each(statement.init, function(init, needsComma) {
+				result += formatExpression(init);
+				if (needsComma) {
+					result += ',';
+				}
+			});
 
 		} else if (statementType == 'LocalStatement') {
 
 			result = 'local ';
 
 			// left-hand side
-			result += statement.variables.map(function(variable) {
+			each(statement.variables, function(variable, needsComma) {
 				// Variables in a `LocalStatement` are always local, duh
-				return generateIdentifier(variable.name);
-			}).join(',');
+				result += generateIdentifier(variable.name);
+				if (needsComma) {
+					result += ',';
+				}
+			});
 
 			// right-hand side
 			if (statement.init.length) {
 				result += '=';
-				result += statement.init.map(function(init) {
-					return formatExpression(init);
-				}).join(',');
+				each(statement.init, function(init, needsComma) {
+					result += formatExpression(init);
+					if (needsComma) {
+						result += ',';
+					}
+				});
 			}
 
 		} else if (statementType == 'CallStatement') {
@@ -282,7 +326,7 @@
 			result = joinStatements('if', formatExpression(statement.clauses[0].condition));
 			result = joinStatements(result, 'then');
 			result = joinStatements(result, formatStatementList(statement.clauses[0].body));
-			statement.clauses.slice(1).forEach(function(clause) {
+			each(statement.clauses.slice(1), function(clause) {
 				if (clause.condition) {
 					result = joinStatements(result, 'elseif');
 					result = joinStatements(result, formatExpression(clause.condition));
@@ -310,10 +354,11 @@
 
 			result = 'return';
 
-			var args = statement.arguments;
-			var length = args.length - 1;
-			args.forEach(function(argument, index) {
-				result = joinStatements(result, formatExpression(args[index])) + (index < length ? ',' : '');
+			each(statement.arguments, function(argument, needsComma) {
+				result = joinStatements(result, formatExpression(argument));
+				if (needsComma) {
+					result += ',';
+				}
 			});
 
 		} else if (statementType == 'BreakStatement') {
@@ -333,10 +378,13 @@
 			result += '(';
 
 			if (statement.parameters.length) {
-				result += statement.parameters.map(function(parameter) {
+				each(statement.parameters, function(parameter, needsComma) {
 					// `Identifier`s have a `name`, `VarargLiteral`s have a `value`
-					return parameter.name || parameter.value;
-				}).join(',');
+					result += parameter.name || parameter.value;
+					if (needsComma) {
+						result += ',';
+					}
+				});
 			}
 
 			result += ')';
@@ -347,20 +395,19 @@
 
 			result = 'for ';
 
-			var variables = statement.variables;
-			var length = variables.length - 1;
-			variables.forEach(function(variable, index) {
+			each(statement.variables, function(variable, needsComma) {
 				// The variables in a `ForGenericStatement` are always local
-				result += generateIdentifier(variable.name) + (index < length ? ',' : '');
+				result += generateIdentifier(variable.name);
+				if (needsComma) {
+					result += ',';
+				}
 			});
 
 			result += ' in';
 
-			var iterators = statement.iterators;
-			var length = iterators.length - 1;
-			iterators.forEach(function(iterator, index) {
+			each(statement.iterators, function(iterator, needsComma) {
 				result = joinStatements(result, formatExpression(iterator));
-				if (index < length) {
+				if (needsComma) {
 					result += ',';
 				}
 			});
@@ -411,14 +458,15 @@
 		currentIdentifier = '9';
 
 		// Make sure global variable names aren't renamed
-		ast.globals.forEach(function(name) {
+		each(ast.globals, function(name) {
 			identifierMap[name] = name;
 		});
 
 		return formatStatementList(ast.body);
 	};
 
-	// Expose luamin
+	/*--------------------------------------------------------------------------*/
+
 	var luamin = {
 		'version': '0.1.0',
 		'minify': minify
