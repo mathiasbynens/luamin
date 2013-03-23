@@ -76,7 +76,7 @@ See `luamin --help` for the full list of options.
 
 ## Support
 
-luamin has been tested in at least Chrome 27, Firefox 3-19, Safari 4-6, Opera 11-12, IE 6-10, Node.js v0.10.0, Narwhal 0.3.2, RingoJS 0.8-0.9, and Rhino 1.7RC4.
+luamin has been tested in at least Chrome 27, Firefox 3-19, Safari 4-6, Opera 10-12, IE 6-10, Node.js v0.10.0, Narwhal 0.3.2, RingoJS 0.8-0.9, and Rhino 1.7RC4.
 
 ## Unit tests & code coverage
 
