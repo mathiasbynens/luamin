@@ -74,6 +74,10 @@ a=(1+2-3)*4/5^6
 
 See `luamin --help` for the full list of options.
 
+## Support
+
+luamin has been tested in at least Chrome 27, Firefox 18-19, Safari 6, Opera 12, IE 6-10, Node.js v0.10.0, Narwhal 0.3.2, RingoJS 0.8-0.9, and Rhino 1.7RC4.
+
 ## Unit tests & code coverage
 
 After cloning this repository, run `npm install --dev` to install the dependencies needed for luamin development and testing. You may want to install Istanbul _globally_ using `npm install istanbul -g`.
