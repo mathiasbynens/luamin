@@ -60,10 +60,10 @@
 					return process.exit(1);
 				}
 			}
-			if (isAST) {
-				snippet = JSON.parse(snippet);
-			}
 			try {
+				if (isAST) {
+					snippet = JSON.parse(snippet);
+				}
 				result = minify(snippet);
 				log(result);
 			} catch(error) {
