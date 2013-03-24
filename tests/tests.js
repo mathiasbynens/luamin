@@ -1977,9 +1977,33 @@
 				'description': 'Empty input',
 				'original': '',
 				'minified': ''
+			},
+			{
+				'description': 'Passing an AST',
+				'original': {'type':'Chunk','body':[{'type':'AssignmentStatement','variables':[{'type':'Identifier','name':'a','isLocal':false}],'init':[{'type':'NumericLiteral','value':42,'raw':'42'}]}],'comments':[],'globals':[{'type':'Identifier','name':'a','isLocal':false}]},
+				'minified': 'a=42'
 			}
-		]
+		],
 
+		// Error handling
+		'Error handling': [
+			{
+				'description': 'Unknown statement type: `LolStatement`',
+				'original': {'type':'Chunk','body':[{'type':'LolStatement','variables':[{'type':'Identifier','name':'a','isLocal':false}],'init':[{'type':'NumericLiteral','value':42,'raw':'42'}]}],'comments':[],'globals':[{'type':'Identifier','name':'a','isLocal':false}]},
+				'error': TypeError
+			},
+			{
+				'description': 'Unknown expression type: `LolExpression`',
+				'original': {'type':'Chunk','body':[{'type':'AssignmentStatement','variables':[{'type':'LolExpression','name':'a','isLocal':false}],'init':[{'type':'NumericLiteral','value':42,'raw':'42'}]}],'comments':[],'globals':[{'type':'Identifier','name':'a','isLocal':false}]},
+				'error': TypeError
+			},
+			{
+				'description': 'Missing required AST property: `globals`',
+				'original': {'type':'Chunk','body':[{'type':'AssignmentStatement','variables':[{'type':'Identifier','name':'a'}],'init':[{'type':'NumericLiteral','value':42,'raw':'42'}]}],'comments':[]},
+				'error': Error
+			},
+
+		]
 	};
 
 	function forEach(array, fn) {
@@ -2002,18 +2026,35 @@
 	// explicitly call `QUnit.module()` instead of `module()`
 	// in case we are in a CLI environment
 
+	// `throws` is a reserved word in ES3; alias it to avoid errors
+	var raises = QUnit.assert['throws'];
+
 	QUnit.module('luamin');
 	forOwn(data, function(items, groupName) {
 		test(groupName, function() {
-			forEach(items, function(item) {
-				equal(
-					minify(item.original),
-					item.minified,
-					item.description
-				);
-			});
+			if (groupName == 'Error handling') {
+				forEach(items, function(item) {
+					raises(
+						function() {
+							minify(item.original);
+						},
+						item.error,
+						item.description
+					);
+				});
+			} else {
+				forEach(items, function(item) {
+					equal(
+						minify(item.original),
+						item.minified,
+						item.description
+					);
+				});
+			}
 		});
 	});
+
+
 
 	/*--------------------------------------------------------------------------*/
 
