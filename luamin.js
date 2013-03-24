@@ -21,6 +21,7 @@
 	var parse = luaparse.parse;
 
 	var regexAlphaUnderscore = /[a-zA-Z_]/;
+	var regexAlphaNumUnderscore = /[a-zA-Z0-9_]/;
 	var regexDigits = /[0-9]/;
 
 	var PRECEDENCE = {
@@ -116,32 +117,38 @@
 		separator || (separator = ' ');
 
 		var lastCharA = a.slice(-1);
-		var firstCharB = b.slice(0, 1);
+		var firstCharB = b.charAt(0);
 
-		if (regexAlphaUnderscore.test(lastCharA)) {
-			if (!(regexAlphaUnderscore.test(firstCharB) || regexDigits.test(firstCharB))) {
-				// `firstCharB` is a symbol; it's safe to join without a separator
-				return a + b;
-			} else {
-				// prevent ambiguous syntax
-				return a + separator + b;
-			}
-		} else if (regexDigits.test(lastCharA)) {
-			if (firstCharB == '(' || (firstCharB != '.' && !regexAlphaUnderscore.test(firstCharB))) {
-				// e.g. `1(` or `1-`
-				return a + b;
-			} else {
-				return a + separator + b;
-			}
-		} else if (lastCharA == '') {
-			return a + b;
-		} else if (!regexAlphaUnderscore.test(lastCharA) && (firstCharB == '(' || regexDigits.test(firstCharB))) {
-			return a + b;
-		} else if (firstCharB == '(' || (lastCharA == firstCharB && lastCharA == '-')) {
-			return a + separator + b;
-		} else {
+		if (lastCharA == '' || firstCharB == '') {
 			return a + b;
 		}
+		if (regexAlphaUnderscore.test(lastCharA)) {
+			if (regexAlphaNumUnderscore.test(firstCharB)) {
+				// e.g. `while` + `1`
+				// e.g. `local a` + `local b`
+				return a + separator + b;
+			} else {
+				// e.g. `not` + `(2>3 or 3<2)`
+				// e.g. `x` + `^`
+				return a + b;
+			}
+		}
+		if (regexDigits.test(lastCharA)) {
+			if (firstCharB == '(' || !(firstCharB == '.' || regexAlphaUnderscore.test(firstCharB))) {
+				// e.g. `1` + `+`
+				// e.g. `1` + `==`
+				return a + b;
+			} else {
+				// e.g. `1` + `..`
+				// e.g. `1` + `and`
+				return a + separator + b;
+			}
+		}
+		if (lastCharA == firstCharB && lastCharA == '-') {
+			// e.g. `1-` + `-2`
+			return a + separator + b;
+		}
+		return a + b;
 	};
 
 	var formatExpression = function(expression, precedence) {
@@ -254,7 +261,7 @@
 					result += '[' + formatExpression(field.key) + ']=' + formatExpression(field.value);
 				} else if (field.type == 'TableValue') {
 					result += formatExpression(field.value);
-				} else if (field.type == 'TableKeyString') {
+				} else { // at this point, `field.type == 'TableKeyString'`
 					result += formatExpression(field.key) + '=' + formatExpression(field.value);
 				}
 				if (needsComma) {

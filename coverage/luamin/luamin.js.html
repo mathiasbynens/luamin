@@ -181,16 +181,16 @@
     <h1>Code coverage report for <span class='entity'>luamin/luamin.js</span></h1>
     <h2>
         
-        Statements: <span class='metric'>95.11% <small>(253 / 266)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        Statements: <span class='metric'>95.08% <small>(251 / 264)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
         
         
-        Branches: <span class='metric'>90.5% <small>(162 / 179)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        Branches: <span class='metric'>90.7% <small>(156 / 172)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
         
         
         Functions: <span class='metric'>96% <small>(24 / 25)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
         
         
-        Lines: <span class='metric'>95.11% <small>(253 / 266)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        Lines: <span class='metric'>95.08% <small>(251 / 264)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
         
     </h2>
     <div class="path"><a href="../index.html">All files</a> &#187; <a href="index.html">luamin/</a> &#187; luamin.js</div>
@@ -702,7 +702,14 @@
 503
 504
 505
-506</td><td class="line-coverage"><span class="cline-any cline-yes">1</span>
+506
+507
+508
+509
+510
+511
+512
+513</td><td class="line-coverage"><span class="cline-any cline-yes">1</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1</span>
@@ -724,6 +731,7 @@
 <span class="cline-any cline-yes">1</span>
 <span class="cline-any cline-yes">1</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
 <span class="cline-any cline-yes">1</span>
 <span class="cline-any cline-yes">1</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -823,29 +831,35 @@
 <span class="cline-any cline-yes">1272</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1272</span>
-<span class="cline-any cline-yes">391</span>
+<span class="cline-any cline-yes">510</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">63</span>
+<span class="cline-any cline-yes">762</span>
+<span class="cline-any cline-yes">354</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">328</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">881</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">26</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">408</span>
 <span class="cline-any cline-yes">167</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">99</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">68</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">714</span>
-<span class="cline-any cline-yes">439</span>
-<span class="cline-any cline-yes">275</span>
-<span class="cline-any cline-yes">111</span>
-<span class="cline-any cline-yes">164</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">241</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">4</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">160</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">237</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1</span>
@@ -958,7 +972,7 @@
 <span class="cline-any cline-yes">4</span>
 <span class="cline-any cline-yes">36</span>
 <span class="cline-any cline-yes">28</span>
-<span class="cline-any cline-yes">8</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">8</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">40</span>
@@ -1230,6 +1244,7 @@
 	var parse = luaparse.parse;
 &nbsp;
 	var regexAlphaUnderscore = /[a-zA-Z_]/;
+	var regexAlphaNumUnderscore = /[a-zA-Z0-9_]/;
 	var regexDigits = /[0-9]/;
 &nbsp;
 	var PRECEDENCE = {
@@ -1325,32 +1340,38 @@
 		separator || (separator = ' ');
 &nbsp;
 		var lastCharA = a.slice(-1);
-		var firstCharB = b.slice(0, 1);
+		var firstCharB = b.charAt(0);
 &nbsp;
-		if (regexAlphaUnderscore.test(lastCharA)) {
-			if (!(regexAlphaUnderscore.test(firstCharB) || regexDigits.test(firstCharB))) {
-				// `firstCharB` is a symbol; it's safe to join without a separator
-				return a + b;
-			} else {
-				// prevent ambiguous syntax
-				return a + separator + b;
-			}
-		} else if (regexDigits.test(lastCharA)) {
-			if (firstCharB == '(' || (firstCharB != '.' &amp;&amp; !regexAlphaUnderscore.test(firstCharB))) {
-				// e.g. `1(` or `1-`
-				return a + b;
-			} else {
-				return a + separator + b;
-			}
-		} else if (lastCharA == '') {
-			return a + b;
-		} else if (!regexAlphaUnderscore.test(lastCharA) &amp;&amp; (firstCharB == '(' || regexDigits.test(firstCharB))) {
-			return a + b;
-		} else if (firstCharB == '(' || (lastCharA == firstCharB &amp;&amp; lastCharA == '-')) {
-			return a + separator + b;
-		} else {
+		if (lastCharA == '' || firstCharB == '') {
 			return a + b;
 		}
+		if (regexAlphaUnderscore.test(lastCharA)) {
+			if (regexAlphaNumUnderscore.test(firstCharB)) {
+				// e.g. `while` + `1`
+				// e.g. `local a` + `local b`
+				return a + separator + b;
+			} else {
+				// e.g. `not` + `(2&gt;3 or 3&lt;2)`
+				// e.g. `x` + `^`
+				return a + b;
+			}
+		}
+		if (regexDigits.test(lastCharA)) {
+			if (firstCharB == '(' || !(firstCharB == '.' || regexAlphaUnderscore.test(firstCharB))) {
+				// e.g. `1` + `+`
+				// e.g. `1` + `==`
+				return a + b;
+			} else {
+				// e.g. `1` + `..`
+				// e.g. `1` + `and`
+				return a + separator + b;
+			}
+		}
+		if (lastCharA == firstCharB &amp;&amp; lastCharA == '-') {
+			// e.g. `1-` + `-2`
+			return a + separator + b;
+		}
+		return a + b;
 	};
 &nbsp;
 	var formatExpression = function(expression, precedence) {
@@ -1463,7 +1484,7 @@
 					result += '[' + formatExpression(field.key) + ']=' + formatExpression(field.value);
 				} else if (field.type == 'TableValue') {
 					result += formatExpression(field.value);
-				} else <span class="missing-if-branch" title="else path not taken"" >E</span>if (field.type == 'TableKeyString') {
+				} else { // at this point, `field.type == 'TableKeyString'`
 					result += formatExpression(field.key) + '=' + formatExpression(field.value);
 				}
 				if (needsComma) {
@@ -1688,7 +1709,7 @@
 	/*--------------------------------------------------------------------------*/
 &nbsp;
 	var luamin = {
-		'version': '0.1.0',
+		'version': '0.1.1',
 		'minify': minify
 	};
 &nbsp;
@@ -1717,7 +1738,7 @@
 
 </div>
 <div class='footer'>
-    <div class='meta'>Generated by <a href='http://istanbul-js.org' target='_blank'>istanbul</a> at Fri Mar 22 2013 22:52:42 GMT+0100 (CET)</div>
+    <div class='meta'>Generated by <a href='http://istanbul-js.org' target='_blank'>istanbul</a> at Sun Mar 24 2013 09:31:48 GMT+0100 (CET)</div>
 </div>
 </body>
 
