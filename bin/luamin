@@ -91,13 +91,14 @@
 	} else {
 		// handle pipe
 		data = '';
-		stdin.on('readable', function() {
-			data += this.read();
+		stdin.on('data', function(chunk) {
+			data += chunk;
 		});
 		stdin.on('end', function() {
 			snippets.unshift(data.trim());
 			main();
 		});
+		stdin.resume();
 	}
 
 }());
