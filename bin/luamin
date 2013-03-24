@@ -7,40 +7,46 @@
 	var snippets = process.argv.splice(2);
 	var option = snippets.shift();
 	var isFile = false;
+	var isAST = false;
 	var stdin = process.stdin;
 	var data;
+	var log = console.log;
 	var main = function() {
 
 		if (/^(?:-h|--help|undefined)$/.test(option)) {
-			console.log('luamin v%s - http://mths.be/luamin', luamin.version);
-			console.log('\nUsage:\n');
-			console.log('\tluamin [-c | --code] [snippet ...]');
-			console.log('\tluamin [-f | --file] [file ...]');
-			console.log('\tluamin [-v | --version]');
-			console.log('\tluamin [-h | --help]');
-			console.log('\nExamples:\n');
-			console.log('\tluamin -c \'a = ((1 + 2) - 3) * (4 / (5 ^ 6))\'');
-			console.log('\tluamin -f foo.lua');
-			console.log('\techo \'a = "foo" .. "bar"\' | luamin -c');
+			log('luamin v%s - http://mths.be/luamin', luamin.version);
+			log('\nUsage:\n');
+			log('\tluamin [-c | --code] [snippet ...]');
+			log('\tluamin [-f | --file] [file ...]');
+			log('\tluamin [-a | --ast] [AST ...]');
+			log('\tluamin [-v | --version]');
+			log('\tluamin [-h | --help]');
+			log('\nExamples:\n');
+			log('\tluamin -c \'a = ((1 + 2) - 3) * (4 / (5 ^ 6))\'');
+			log('\tluamin -f foo.lua');
+			log('\techo \'a = "foo" .. "bar"\' | luamin -c');
+			log('\tluaparse --scope \'a = 42\' | luamin -a');
 			return process.exit(1);
 		}
 
 		if (/^(?:-v|--version)$/.test(option)) {
-			console.log('v%s', luamin.version);
+			log('v%s', luamin.version);
 			return process.exit(1);
 		}
 
 		if (/^(?:-f|--file)$/.test(option)) {
 			isFile = true;
+		} else if (/^(?:-a|--ast)$/.test(option)) {
+			isAST = true;
 		} else if (!/^(?:-c|--code)$/.test(option)) {
-			console.log('Unrecognized option `%s`.', option);
-			console.log('Try `luamin --help` for more information.');
+			log('Unrecognized option `%s`.', option);
+			log('Try `luamin --help` for more information.');
 			return process.exit(1);
 		}
 
 		if (!snippets.length) {
-			console.log('Error: option `%s` requires an argument.', option);
-			console.log('Try `luamin --help` for more information.');
+			log('Error: option `%s` requires an argument.', option);
+			log('Try `luamin --help` for more information.');
 			return process.exit(1);
 		}
 
@@ -50,17 +56,26 @@
 				try {
 					snippet = fs.readFileSync(snippet, 'utf-8');
 				} catch(error) {
-					console.log('Error: no such file. (`%s`)', snippet);
+					log('Error: no such file. (`%s`)', snippet);
 					return process.exit(1);
 				}
 			}
+			if (isAST) {
+				snippet = JSON.parse(snippet);
+			}
 			try {
 				result = minify(snippet);
-				console.log(result);
+				log(result);
 			} catch(error) {
-				console.log('Error: failed to minify. Make sure the Lua code is valid.');
-				console.log('If you think this is a bug in luamin, please report it:');
-				console.log('https://github.com/mathiasbynens/luamin/issues/new')
+				if (isFile) {
+					log('Error: failed to minify. Make sure the Lua code is valid.');
+				} else { // `isAST`
+					log('Error: failed to minify. Make sure the AST contains a ' +
+						'`globals` property and is');
+					log('fully compatible with luaparse.');
+				}
+				log('If you think this is a bug in luamin, please report it:');
+				log('https://github.com/mathiasbynens/luamin/issues/new')
 				return process.exit(1);
 			}
 		});

@@ -61,7 +61,6 @@
 				return index;
 			}
 		}
-		return -1;
 	}
 
 	var generateZeroes = function(length) {
@@ -314,7 +313,7 @@
 
 		} else {
 
-			throw Error('Unknown expression type: ' + expressionType);
+			throw TypeError('Unknown expression type: `' + expressionType + '`');
 
 		}
 
@@ -509,15 +508,19 @@
 
 		} else {
 
-			throw Error('Unknown AST type: ' + statementType);
+			throw TypeError('Unknown statement type: `' + statementType + '`');
 
 		}
 
 		return result;
 	};
 
-	var minify = function(code) {
-		var ast = parse(code);
+	var minify = function(argument) {
+		// `argument` can be a Lua code snippet (string)
+		// or a luaparse-compatible AST (object)
+		var ast = typeof argument == 'string'
+			? parse(argument)
+			: argument;
 
 		// (Re)set temporary identifier values
 		identifierMap = {};
@@ -525,9 +528,13 @@
 		currentIdentifier = '9';
 
 		// Make sure global variable names aren't renamed
-		each(ast.globals, function(name) {
-			identifierMap[name] = name;
-		});
+		if (ast.globals) {
+			each(ast.globals, function(name) {
+				identifierMap[name] = name;
+			});
+		} else {
+			throw Error('Missing required AST property: `globals`');
+		}
 
 		return formatStatementList(ast.body);
 	};
