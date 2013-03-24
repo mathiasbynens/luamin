@@ -24,9 +24,9 @@
 	var regexAlphaNumUnderscore = /[a-zA-Z0-9_]/;
 	var regexDigits = /[0-9]/;
 
+	// http://www.lua.org/manual/5.2/manual.html#3.4.7
+	// http://www.lua.org/source/5.2/lparser.c.html#priority
 	var PRECEDENCE = {
-		// http://www.lua.org/manual/5.2/manual.html#3.4.7
-		// http://www.lua.org/source/5.2/lparser.c.html#priority
 		'or': 1,
 		'and': 2,
 		'<': 3, '>': 3, '<=': 3, '>=': 3, '~=': 3, '==': 3,
@@ -36,6 +36,11 @@
 		'unarynot': 8, 'unary#': 8, 'unary-': 8, // unary -
 		'^': 10
 	};
+
+	// http://www.lua.org/manual/5.2/manual.html#3.1
+	var RESERVED_KEYWORDS = ['do', 'if', 'in', 'or', 'and', 'end', 'for', 'nil',
+		'not', 'else', 'goto', 'then', 'true', 'break', 'false', 'local', 'until',
+		'while', 'elseif', 'repeat', 'return', 'function'];
 
 	var IDENTIFIER_PARTS = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a',
 		'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p',
@@ -57,11 +62,11 @@
 		var index = -1;
 		var length = array.length;
 		while (++index < length) {
-			if (array[index] === value) {
+			if (array[index] == value) {
 				return index;
 			}
 		}
-		//return -1; // not needed in this case!
+		return -1;
 	}
 
 	var generateZeroes = function(length) {
@@ -88,6 +93,7 @@
 	var identifierMap;
 	var hasOwnProperty = {}.hasOwnProperty;
 	var generateIdentifier = function(originalName) {
+		var log = false;
 		if (hasOwnProperty.call(identifierMap, originalName)) {
 			return identifierMap[originalName];
 		}
@@ -101,8 +107,12 @@
 			if (index != IDENTIFIER_PARTS_MAX) {
 				currentIdentifier = currentIdentifier.substring(0, position) +
 					IDENTIFIER_PARTS[index + 1] + generateZeroes(length - (position + 1));
+				if (indexOf(RESERVED_KEYWORDS, currentIdentifier) == -1) {
 					identifierMap[originalName] = currentIdentifier;
-				return currentIdentifier;
+					return currentIdentifier;
+				} else {
+					return generateIdentifier(originalName);
+				}
 			}
 			--position;
 		}
