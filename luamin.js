@@ -108,7 +108,6 @@
 	var identifierMap;
 	var hasOwnProperty = {}.hasOwnProperty;
 	var generateIdentifier = function(originalName) {
-		var log = false;
 		if (hasOwnProperty.call(identifierMap, originalName)) {
 			return identifierMap[originalName];
 		}
