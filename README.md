@@ -1,6 +1,6 @@
 # luamin, a Lua minifier written in JavaScript
 
-luamin uses the excellent [luaparse](http://oxyc.github.com/luaparse/) library to parse Lua code into an Abstract Syntax Tree. Based on that AST, luamin then generates a (hopefully) more compact yet semantically equivalent Lua program.
+luamin uses the excellent [luaparse](http://oxyc.github.com/luaparse/) library to parse Lua code into an Abstract Syntax Tree. Based on that AST, luamin then generates a (hopefully) more compact yet semantically equivalent Lua program. [Here’s an online demo.](http://mothereff.in/lua-minifier)
 
 luamin was inspired by the [LuaMinify](https://github.com/stravant/LuaMinify) and [esmangle](https://github.com/Constellation/esmangle) projects.
 
@@ -80,7 +80,7 @@ See `luamin --help` for the full list of options.
 
 ## Support
 
-luamin has been tested in at least Chrome 27, Firefox 3-19, Safari 4-6, Opera 10-12, IE 6-10, Node.js v0.10.0, Narwhal 0.3.2, RingoJS 0.8-0.9, and Rhino 1.7RC4.
+luamin has been tested in at least Chrome 25-27, Firefox 3-19, Safari 4-6, Opera 10-12, IE 6-10, Node.js v0.10.0, Narwhal 0.3.2, RingoJS 0.8-0.9, and Rhino 1.7RC4.
 
 ## Unit tests & code coverage
 
