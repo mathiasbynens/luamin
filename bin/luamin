@@ -54,7 +54,7 @@
 			var result;
 			if (isFile) {
 				try {
-					snippet = fs.readFileSync(snippet, 'utf-8');
+					snippet = fs.readFileSync(snippet, 'utf8');
 				} catch(error) {
 					log('Error: no such file. (`%s`)', snippet);
 					return process.exit(1);
