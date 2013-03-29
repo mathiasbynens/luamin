@@ -63,12 +63,13 @@
 		}
 	};
 
-	var extend = function(source, destination) {
-		if (source) {
-			for (var key in source) {
-				if (source.hasOwnProperty(key)) {
-					destination[key] = source[key];
-				}
+	var hasOwnProperty = {}.hasOwnProperty;
+	var extend = function(destination, source) {
+		var key;
+		source || (source = {});
+		for (key in source) {
+			if (hasOwnProperty.call(source, key)) {
+				destination[key] = source[key];
 			}
 		}
 		return destination;
@@ -117,7 +118,7 @@
 
 	var currentIdentifier;
 	var identifierMap;
-	var hasOwnProperty = {}.hasOwnProperty;
+	var identifiersInUse;
 	var generateIdentifier = function(originalName) {
 		if (hasOwnProperty.call(identifierMap, originalName)) {
 			return identifierMap[originalName];
@@ -132,16 +133,21 @@
 			if (index != IDENTIFIER_PARTS_MAX) {
 				currentIdentifier = currentIdentifier.substring(0, position) +
 					IDENTIFIER_PARTS[index + 1] + generateZeroes(length - (position + 1));
-				if (isKeyword(currentIdentifier)) {
+				if (
+					isKeyword(currentIdentifier) ||
+					indexOf(identifiersInUse, currentIdentifier) > -1
+				) {
 					return generateIdentifier(originalName);
-				} else {
-					identifierMap[originalName] = currentIdentifier;
-					return currentIdentifier;
 				}
+				identifierMap[originalName] = currentIdentifier;
+				return currentIdentifier;
 			}
 			--position;
 		}
 		currentIdentifier = 'a' + generateZeroes(length);
+		if (indexOf(identifiersInUse, currentIdentifier) > -1) {
+			return generateIdentifier(originalName);
+		}
 		identifierMap[originalName] = currentIdentifier;
 		return currentIdentifier;
 	};
@@ -192,10 +198,10 @@
 
 	var formatExpression = function(expression, options) {
 
-		options = extend(options, {
+		options = extend({
 			'precedence': 0,
 			'preserveIdentifiers': false
-		});
+		}, options);
 
 		var result = '';
 		var currentPrecedence;
@@ -299,7 +305,9 @@
 			if (expression.parameters.length) {
 				each(expression.parameters, function(parameter, needsComma) {
 					// `Identifier`s have a `name`, `VarargLiteral`s have a `value`
-					result += parameter.name || parameter.value;
+					result += parameter.name
+						? generateIdentifier(parameter.name)
+						: parameter.value;
 					if (needsComma) {
 						result += ',';
 					}
@@ -463,7 +471,9 @@
 			if (statement.parameters.length) {
 				each(statement.parameters, function(parameter, needsComma) {
 					// `Identifier`s have a `name`, `VarargLiteral`s have a `value`
-					result += parameter.name || parameter.value;
+					result += parameter.name
+						? generateIdentifier(parameter.name)
+						: parameter.value;
 					if (needsComma) {
 						result += ',';
 					}
@@ -543,13 +553,16 @@
 
 		// (Re)set temporary identifier values
 		identifierMap = {};
+		identifiersInUse = [];
 		// This is a shortcut to help generate the first identifier (`a`) faster
 		currentIdentifier = '9';
 
 		// Make sure global variable names aren't renamed
 		if (ast.globals) {
-			each(ast.globals, function(name) {
+			each(ast.globals, function(object) {
+				var name = object.name;
 				identifierMap[name] = name;
+				identifiersInUse.push(name);
 			});
 		} else {
 			throw Error('Missing required AST property: `globals`');
@@ -579,9 +592,7 @@
 		if (freeModule) { // in Node.js or RingoJS v0.8.0+
 			freeModule.exports = luamin;
 		} else { // in Narwhal or RingoJS v0.7.0-
-			for (var key in luamin) {
-				luamin.hasOwnProperty(key) && (freeExports[key] = luamin[key]);
-			}
+			extend(freeExports, luamin);
 		}
 	} else { // in Rhino or a web browser
 		root.luamin = luamin;
