@@ -66,10 +66,11 @@
 	var hasOwnProperty = {}.hasOwnProperty;
 	var extend = function(destination, source) {
 		var key;
-		source || (source = {});
-		for (key in source) {
-			if (hasOwnProperty.call(source, key)) {
-				destination[key] = source[key];
+		if (source) {
+			for (key in source) {
+				if (hasOwnProperty.call(source, key)) {
+					destination[key] = source[key];
+				}
 			}
 		}
 		return destination;
