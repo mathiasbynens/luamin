@@ -2043,6 +2043,9 @@
 	// `throws` is a reserved word in ES3; alias it to avoid errors
 	var raises = QUnit.assert['throws'];
 
+	// Extend `Object.prototype` to see if luamin can handle it
+	Object.prototype.preserveIdentifiers = true;
+
 	QUnit.module('luamin');
 	forOwn(data, function(items, groupName) {
 		test(groupName, function() {
