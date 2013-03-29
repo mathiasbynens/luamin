@@ -430,12 +430,12 @@
 			{
 				'description': 'AssignmentStatement + FunctionDeclaration',
 				'original': 'a = function(p) end',
-				'minified': 'a=function(p)end'
+				'minified': 'a=function(b)end'
 			},
 			{
 				'description': 'AssignmentStatement + FunctionDeclaration',
 				'original': 'a = function(p,q,r) end',
-				'minified': 'a=function(p,q,r)end'
+				'minified': 'a=function(b,c,d)end'
 			},
 			{
 				'description': 'AssignmentStatement + FunctionDeclaration',
@@ -445,12 +445,12 @@
 			{
 				'description': 'AssignmentStatement + FunctionDeclaration',
 				'original': 'a = function(p, ...) end',
-				'minified': 'a=function(p,...)end'
+				'minified': 'a=function(b,...)end'
 			},
 			{
 				'description': 'Assignments + FunctionDeclaration',
 				'original': 'a = function(p, q, r, ...) end',
-				'minified': 'a=function(p,q,r,...)end'
+				'minified': 'a=function(b,c,d,...)end'
 			},
 			{
 				'description': 'AssignmentStatement + TableConstructorExpression',
@@ -897,22 +897,22 @@
 			{
 				'description': 'FunctionDeclaration',
 				'original': 'function a(p) end',
-				'minified': 'function a(p)end'
+				'minified': 'function a(b)end'
 			},
 			{
 				'description': 'FunctionDeclaration',
 				'original': 'function a(p, q, r) end',
-				'minified': 'function a(p,q,r)end'
+				'minified': 'function a(b,c,d)end'
 			},
 			{
 				'description': 'FunctionDeclaration + ReturnStatement',
 				'original': 'function a(p) return end',
-				'minified': 'function a(p)return end'
+				'minified': 'function a(b)return end'
 			},
 			{
 				'description': 'FunctionDeclaration + DoStatement',
 				'original': 'function a(p) do end end',
-				'minified': 'function a(p)do end end'
+				'minified': 'function a(b)do end end'
 			},
 			{
 				'description': 'FunctionDeclaration + MemberExpression',
@@ -942,12 +942,12 @@
 			{
 				'description': 'FunctionDeclaration',
 				'original': 'function a(p, ...) end',
-				'minified': 'function a(p,...)end'
+				'minified': 'function a(b,...)end'
 			},
 			{
 				'description': 'FunctionDeclaration',
 				'original': 'function a(p, q, r, ...) end',
-				'minified': 'function a(p,q,r,...)end'
+				'minified': 'function a(b,c,d,...)end'
 			},
 			{
 				'description': 'FunctionDeclaration + LocalStatement',
@@ -1234,22 +1234,22 @@
 			{
 				'description': 'LocalStatement',
 				'original': 'local function a(p) end',
-				'minified': 'local function a(p)end'
+				'minified': 'local function a(b)end'
 			},
 			{
 				'description': 'LocalStatement',
 				'original': 'local function a(p,q,r) end',
-				'minified': 'local function a(p,q,r)end'
+				'minified': 'local function a(b,c,d)end'
 			},
 			{
 				'description': 'LocalStatement',
 				'original': 'local function a(p) return end',
-				'minified': 'local function a(p)return end'
+				'minified': 'local function a(b)return end'
 			},
 			{
 				'description': 'LocalStatement',
 				'original': 'local function a(p) do end end',
-				'minified': 'local function a(p)do end end'
+				'minified': 'local function a(b)do end end'
 			},
 			{
 				'description': 'LocalStatement',
@@ -1259,12 +1259,12 @@
 			{
 				'description': 'LocalStatement',
 				'original': 'local function a(p,...) end',
-				'minified': 'local function a(p,...)end'
+				'minified': 'local function a(b,...)end'
 			},
 			{
 				'description': 'LocalStatement',
 				'original': 'local function a(p,q,r,...) end',
-				'minified': 'local function a(p,q,r,...)end'
+				'minified': 'local function a(b,c,d,...)end'
 			},
 			{
 				'description': 'LocalStatement',
