@@ -1,4 +1,5 @@
-(function(root) {
+/*! http://mths.be/luamin v0.2.4 by @mathias */
+;(function(root) {
 
 	// Detect free variables `exports`
 	var freeExports = typeof exports == 'object' && exports;
