@@ -1,18 +1,17 @@
 <!doctype html>
-<html>
+<html lang="en">
 <head>
     <title>Code coverage report for luamin/luamin.js</title>
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-    <meta http-equiv="content-language" content="en-gb">
-    
-        <link rel='stylesheet' href='../prettify.css'>
-    
-    <style type='text/css'>
+    <meta charset="utf-8">
+
+    <link rel="stylesheet" href="../prettify.css">
+
+    <style>
         body, html {
             margin:0; padding: 0;
         }
         body {
-            font-family: "Helvetic Neue", Helvetica,Arial;
+            font-family: Helvetica Neue, Helvetica,Arial;
             font-size: 10pt;
         }
         div.header, div.footer {
@@ -46,11 +45,14 @@
             font-size: 10pt;
         }
         pre {
-            font-family: consolas, menlo, monaco, monospace;
+            font-family: Consolas, Menlo, Monaco, monospace;
             margin: 0;
             padding: 0;
             line-height: 14px;
             font-size: 14px;
+            -moz-tab-size: 2;
+            -o-tab-size:  2;
+            tab-size: 2;
         }
 
         div.path { font-size: 110%; }
@@ -177,25 +179,25 @@
     </style>
 </head>
 <body>
-<div class='header high'>
-    <h1>Code coverage report for <span class='entity'>luamin/luamin.js</span></h1>
+<div class="header high">
+    <h1>Code coverage report for <span class="entity">luamin/luamin.js</span></h1>
     <h2>
         
-        Statements: <span class='metric'>97.23% <small>(281 / 289)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        Statements: <span class="metric">97.23% <small>(281 / 289)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
         
         
-        Branches: <span class='metric'>89.1% <small>(188 / 211)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        Branches: <span class="metric">88.73% <small>(189 / 213)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
         
         
-        Functions: <span class='metric'>96.3% <small>(26 / 27)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        Functions: <span class="metric">96.3% <small>(26 / 27)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
         
         
-        Lines: <span class='metric'>97.23% <small>(281 / 289)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        Lines: <span class="metric">97.23% <small>(281 / 289)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
         
     </h2>
     <div class="path"><a href="../index.html">All files</a> &#187; <a href="index.html">luamin/</a> &#187; luamin.js</div>
 </div>
-<div class='body'>
+<div class="body">
 <pre><table class="coverage">
 <tr><td class="line-count">1
 2
@@ -798,13 +800,18 @@
 599
 600
 601
-602</td><td class="line-coverage"><span class="cline-any cline-yes">1</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+602
+603
+604
+605</td><td class="line-coverage"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -867,9 +874,10 @@
 <span class="cline-any cline-yes">1</span>
 <span class="cline-any cline-yes">1448</span>
 <span class="cline-any cline-yes">1448</span>
-<span class="cline-any cline-yes">1448</span>
-<span class="cline-any cline-yes">1664</span>
 <span class="cline-any cline-yes">294</span>
+<span class="cline-any cline-yes">510</span>
+<span class="cline-any cline-yes">294</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1448</span>
@@ -1399,7 +1407,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">(function(root) {
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">/*! http://mths.be/luamin v0.2.4 by @mathias */
+;(function(root) {
 &nbsp;
 	// Detect free variables `exports`
 	var freeExports = typeof exports == 'object' &amp;&amp; exports;
@@ -1408,9 +1417,10 @@
 	var freeModule = typeof module == 'object' &amp;&amp; module &amp;&amp;
 		module.exports == freeExports &amp;&amp; module;
 &nbsp;
-	// Detect free variable `global` and use it as `root`
+	// Detect free variable `global`, from Node.js or Browserified code,
+	// and use it as `root`
 	var freeGlobal = typeof global == 'object' &amp;&amp; global;
-	<span class="missing-if-branch" title="else path not taken"" >E</span>if (freeGlobal.global === freeGlobal) {
+	<span class="missing-if-branch" title="else path not taken"" >E</span>if (freeGlobal.global === freeGlobal || <span class="branch-1 cbranch-no" title="branch not covered" >freeGlobal.window === freeGlobal)</span> {
 		root = freeGlobal;
 	}
 &nbsp;
@@ -1467,10 +1477,11 @@
 	var hasOwnProperty = {}.hasOwnProperty;
 	var extend = function(destination, source) {
 		var key;
-		source || (source = {});
-		for (key in source) {
-			if (hasOwnProperty.call(source, key)) {
-				destination[key] = source[key];
+		if (source) {
+			for (key in source) {
+				if (hasOwnProperty.call(source, key)) {
+					destination[key] = source[key];
+				}
 			}
 		}
 		return destination;
@@ -1975,7 +1986,7 @@
 	/*--------------------------------------------------------------------------*/
 &nbsp;
 	var luamin = {
-		'version': '0.2.3',
+		'version': '0.2.4',
 		'minify': minify
 	};
 &nbsp;
@@ -2004,10 +2015,9 @@
 </table></pre>
 
 </div>
-<div class='footer'>
-    <div class='meta'>Generated by <a href='http://istanbul-js.org' target='_blank'>istanbul</a> at Fri Mar 29 2013 12:30:34 GMT+0100 (CET)</div>
+<div class="footer">
+    <div class="meta">Generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Wed Apr 03 2013 11:37:25 GMT+0200 (CEST)</div>
 </div>
-</body>
 
 <script src="../prettify.js"></script>
 
@@ -2103,4 +2113,5 @@
         });
     });
 </script>
+</body>
 </html>
