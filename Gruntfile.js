@@ -11,9 +11,13 @@ module.exports = function(grunt) {
 			'testFile': 'tests/tests.js'
 		},
 		'shell': {
+			'options': {
+				'stdout': true,
+				'stderr': true,
+				'failOnError': true
+			},
 			'cover': {
-				'command': 'istanbul cover --report "html" --verbose --dir "coverage" "<%= meta.testFile %>"',
-				'options': commandOptions
+				'command': 'istanbul cover --report "html" --verbose --dir "coverage" "<%= meta.testFile %>"'
 			},
 			// Rhino 1.7R4 has a bug that makes it impossible to test luamin.
 			// https://bugzilla.mozilla.org/show_bug.cgi?id=775566
@@ -21,29 +25,22 @@ module.exports = function(grunt) {
 			'test-rhino': {
 				'command': 'echo "Testing in Rhino..."; rhino -opt -1 "tests.js"',
 				'options': {
-					'stdout': true,
-					'stderr': true,
-					'failOnError': true,
 					'execOptions': {
 						'cwd': 'tests'
 					}
 				}
 			},
 			'test-ringo': {
-				'command': 'echo "Testing in Ringo..."; ringo -o -1 "<%= meta.testFile %>"',
-				'options': commandOptions
+				'command': 'echo "Testing in Ringo..."; ringo -o -1 "<%= meta.testFile %>"'
 			},
 			'test-narwhal': {
-				'command': 'echo "Testing in Narwhal..."; export NARWHAL_OPTIMIZATION=-1; narwhal "<%= meta.testFile %>"',
-				'options': commandOptions
+				'command': 'echo "Testing in Narwhal..."; export NARWHAL_OPTIMIZATION=-1; narwhal "<%= meta.testFile %>"'
 			},
 			'test-node': {
-				'command': 'echo "Testing in Node..."; node "<%= meta.testFile %>"',
-				'options': commandOptions
+				'command': 'echo "Testing in Node..."; node "<%= meta.testFile %>"'
 			},
 			'test-browser': {
-				'command': 'echo "Testing in a browser..."; open "tests/index.html"',
-				'options': commandOptions
+				'command': 'echo "Testing in a browser..."; open "tests/index.html"'
 			}
 		}
 	});
@@ -59,6 +56,9 @@ module.exports = function(grunt) {
 		'shell:test-browser'
 	]);
 
-	grunt.registerTask('default', ['test', 'cover']);
+	grunt.registerTask('default', [
+		'test',
+		'cover'
+	]);
 
 };
