@@ -2,7 +2,7 @@
 
 luamin uses the excellent [luaparse](http://oxyc.github.com/luaparse/) library to parse Lua code into an Abstract Syntax Tree. Based on that AST, luamin then generates a (hopefully) more compact yet semantically equivalent Lua program. [Here’s an online demo.](http://mothereff.in/lua-minifier)
 
-luamin was inspired by the [LuaMinify](https://github.com/stravant/LuaMinify) and [esmangle](https://github.com/Constellation/esmangle) projects.
+luamin was inspired by the [LuaMinify](https://github.com/stravant/LuaMinify) and [Esmangle](https://github.com/Constellation/esmangle) projects.
 
 Feel free to fork if you see possible improvements!
 
@@ -84,7 +84,7 @@ luamin has been tested in at least Chrome 25-27, Firefox 3-22, Safari 4-6, Opera
 
 ## Unit tests & code coverage
 
-After cloning this repository, run `npm install --dev` to install the dependencies needed for luamin development and testing. You may want to install Istanbul _globally_ using `npm install istanbul -g`.
+After cloning this repository, run `npm install` to install the dependencies needed for luamin development and testing. You may want to install Istanbul _globally_ using `npm install istanbul -g`.
 
 Once that’s done, you can run the unit tests in Node using `npm test` or `node tests/tests.js`. To run the tests in Rhino, Ringo, Narwhal, and web browsers as well, use `grunt test`.
 
