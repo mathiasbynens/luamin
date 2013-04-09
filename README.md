@@ -1,6 +1,6 @@
 # luamin, a Lua minifier written in JavaScript
 
-luamin uses the excellent [luaparse](http://oxyc.github.com/luaparse/) library to parse Lua code into an Abstract Syntax Tree. Based on that AST, luamin then generates a (hopefully) more compact yet semantically equivalent Lua program. [Here’s an online demo.](http://mothereff.in/lua-minifier)
+luamin uses the excellent [luaparse](http://oxyc.github.io/luaparse/) library to parse Lua code into an Abstract Syntax Tree. Based on that AST, luamin then generates a (hopefully) more compact yet semantically equivalent Lua program. [Here’s an online demo.](http://mothereff.in/lua-minifier)
 
 luamin was inspired by the [LuaMinify](https://github.com/stravant/LuaMinify) and [Esmangle](https://github.com/Constellation/esmangle) projects.
 
