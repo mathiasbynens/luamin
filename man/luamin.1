@@ -1,0 +1,76 @@
+.Dd April 19, 2013
+.Dt luamin 1
+.Sh NAME
+.Nm luamin
+.Nd minify Lua code
+.Sh SYNOPSIS
+.Nm
+.Op Fl c | -code Ar snippet
+.br
+.Op Fl f | -file Ar file
+.br
+.Op Fl a | -ast Ar ast
+.br
+.Op Fl v | -version
+.br
+.Op Fl h | -help
+.Sh DESCRIPTION
+.Nm
+is a Lua minifier written in JavaScript. It can compress Lua code snippets, or even Abstract Syntax Trees that represent Lua programs.
+.Sh OPTIONS
+.Bl -ohang -offset
+.It Sy "-v, --version"
+Print luamin's version.
+.It Sy "-h, --help"
+Show the help screen.
+.It Sy "-c, --code <snippet>"
+Print minified version of the given Lua snippet.
+.It Sy "-f, --file <file>"
+Print minified version of the given Lua file.
+.It Sy "-a, --ast <ast>"
+Print minified version of the given Lua AST. The AST must be compatible with
+.Xr luaparse 1
+and must contain a
+.Va globals
+property. Such ASTs can be generated using
+.Xr luaparse 1
+by enabling the
+.Va scope
+option.
+.El
+.Sh EXIT STATUS
+The
+.Nm luamin
+utility exits with one of the following values:
+.Pp
+.Bl -tag -width flag -compact
+.It Li 0
+.Nm
+successfully minified the Lua code and printed the result.
+.It Li 1
+.Nm
+wasn't instructed to minify any code (for example, the
+.Ar --help
+flag was set); or, an error occurred.
+.El
+.Sh EXAMPLES
+.Bl -ohang -offset
+.It Sy "luamin -c 'a = ((1 + 2) - 3) * (4 / (5 ^ 6))'"
+Print a minified version of the given Lua code snippet.
+.It Sy "luamin -f foo.lua"
+Read the Lua code in the file
+.Ar foo.lua
+and print a minified version.
+.It Sy echo\ 'a\ =\ "foo"\ ..\ "bar"'\ |\ luamin\ -c
+Print a minified version of the Lua snippet that gets piped in.
+.It Sy "luaparse --scope 'a = 42' | luamin -a"
+Print a minified version of the Lua code that corresponds to the given Abstract Syntax Tree that gets piped in.
+.El
+.Sh SEE ALSO
+.Xr luaparse 1
+.Sh BUGS
+luamin's bug tracker is located at <https://github.com/mathiasbynens/luamin/issues>.
+.Sh AUTHOR
+Mathias Bynens <http://mathiasbynens.be/>
+.Sh WWW
+<http://mths.be/luamin>
