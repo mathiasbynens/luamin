@@ -122,17 +122,17 @@
 			},
 			{
 				'description': 'Comment + BreakStatement',
-				'original': '--[[comment]]--break',
+				'original': '--[[comment]]--\nbreak',
 				'minified': 'break'
 			},
 			{
 				'description': 'Comment + BreakStatement',
-				'original': '--[=[comment]=]--break',
+				'original': '--[=[comment]=]--\nbreak',
 				'minified': 'break'
 			},
 			{
 				'description': 'Comment + BreakStatement',
-				'original': '--[===[comment\n--[=[sub]=]--\n]===]--break',
+				'original': '--[===[comment\n--[=[sub]=]--\n]===]--\nbreak',
 				'minified': 'break'
 			},
 			{
