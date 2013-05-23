@@ -1,0 +1,12 @@
+.*
+*.md
+coverage
+node_modules/grunt
+node_modules/grunt-shell
+node_modules/istanbul
+node_modules/qunit-clib
+node_modules/qunitjs
+node_modules/requirejs
+tests
+Gruntfile.js
+npm-debug.log
