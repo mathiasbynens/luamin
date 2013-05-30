@@ -1,0 +1,18 @@
+{
+	"name": "luamin",
+	"version": "0.2.5",
+	"main": "luamin.js",
+	"dependencies": {
+		"luaparse": "~0.0.11"
+	},
+	"ignore": [
+		"bin",
+		"coverage",
+		"man",
+		"tests",
+		".*",
+		"Gruntfile.js",
+		"package.json",
+		"node_modules"
+	]
+}
