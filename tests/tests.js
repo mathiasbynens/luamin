@@ -19,7 +19,7 @@
 
 	/** The `luaparse` utility function */
 	var luaparse = root.luaparse || (root.luaparse = (
-		luaparse = load('../node_modules/luaparse/lib/luaparse.js') || root.luaparse,
+		luaparse = load('../node_modules/luaparse/luaparse.js') || root.luaparse,
 		luaparse = luaparse.luaparse || luaparse
 	));
 
