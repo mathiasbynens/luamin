@@ -3,7 +3,7 @@
 	"version": "0.2.6",
 	"main": "luamin.js",
 	"dependencies": {
-		"luaparse": "~0.0.11"
+		"luaparse": "~0.0.14"
 	},
 	"ignore": [
 		"bin",
@@ -11,8 +11,9 @@
 		"man",
 		"tests",
 		".*",
+		"component.json",
 		"Gruntfile.js",
-		"package.json",
-		"node_modules"
+		"node_modules",
+		"package.json"
 	]
 }

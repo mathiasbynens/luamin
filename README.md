@@ -10,33 +10,45 @@ Feel free to fork if you see possible improvements!
 
 ## Installation and usage
 
-In a browser:
-
-~~~html
-<script src="luamin.js"></script>
-~~~
-
 Via [npm](http://npmjs.org/):
 
-~~~bash
+```bash
 npm install luamin
-~~~
+```
+
+Via [Bower](http://bower.io/):
+
+```bash
+bower install luamin
+```
+
+Via [Component](https://github.com/component/component):
+
+```bash
+component install mathiasbynens/luamin
+```
+
+In a browser:
+
+```html
+<script src="luamin.js"></script>
+```
 
 In [Narwhal](http://narwhaljs.org/), [Node.js](http://nodejs.org/), and [RingoJS](http://ringojs.org/):
 
-~~~js
+```js
 var luamin = require('luamin');
-~~~
+```
 
 In [Rhino](http://www.mozilla.org/rhino/):
 
-~~~js
+```js
 load('luamin.js');
-~~~
+```
 
 Using an AMD loader like [RequireJS](http://requirejs.org/):
 
-~~~js
+```js
 require(
   {
     'paths': {
@@ -48,18 +60,18 @@ require(
     console.log(luamin);
   }
 );
-~~~
+```
 
 Usage example:
 
-~~~js
+```js
 var luaCode = 'a = ((1 + 2) - 3) * (4 / (5 ^ 6)) -- foo';
 luamin.minify(luaCode); // 'a=(1+2-3)*4/5^6'
 
 // `minify` also accepts luaparse-compatible ASTs as its argument:
 var ast = luaparse.parse(luaCode, { 'scope': true });
 luamin.minify(ast); // 'a=(1+2-3)*4/5^6'
-~~~
+```
 
 ### Using the `luamin` binary
 
