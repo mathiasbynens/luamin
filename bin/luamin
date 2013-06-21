@@ -15,17 +15,19 @@
 
 		if (/^(?:-h|--help|undefined)$/.test(option)) {
 			log('luamin v%s - http://mths.be/luamin', luamin.version);
-			log('\nUsage:\n');
-			log('\tluamin [-c | --code] [snippet ...]');
-			log('\tluamin [-f | --file] [file ...]');
-			log('\tluamin [-a | --ast] [AST ...]');
-			log('\tluamin [-v | --version]');
-			log('\tluamin [-h | --help]');
-			log('\nExamples:\n');
-			log('\tluamin -c \'a = ((1 + 2) - 3) * (4 / (5 ^ 6))\'');
-			log('\tluamin -f foo.lua');
-			log('\techo \'a = "foo" .. "bar"\' | luamin -c');
-			log('\tluaparse --scope \'a = 42\' | luamin -a');
+			log([
+				'\nUsage:\n',
+				'\tluamin [-c | --code] [snippet ...]',
+				'\tluamin [-f | --file] [file ...]',
+				'\tluamin [-a | --ast] [AST ...]',
+				'\tluamin [-v | --version]',
+				'\tluamin [-h | --help]',
+				'\nExamples:\n',
+				'\tluamin -c \'a = ((1 + 2) - 3) * (4 / (5 ^ 6))\'',
+				'\tluamin -f foo.lua',
+				'\techo \'a = "foo" .. "bar"\' | luamin -c',
+				'\tluaparse --scope \'a = 42\' | luamin -a'
+			].join('\n'));
 			return process.exit(1);
 		}
 
@@ -67,15 +69,18 @@
 				result = minify(snippet);
 				log(result);
 			} catch(error) {
-				if (isFile) {
-					log('Error: failed to minify. Make sure the Lua code is valid.');
-				} else { // `isAST`
+				log(error.message + '\n');
+				if (isAST) {
 					log('Error: failed to minify. Make sure the AST contains a ' +
 						'`globals` property and is');
 					log('fully compatible with luaparse.');
+				} else { // it’s a snippet or an AST
+					log('Error: failed to minify. Make sure the Lua code is valid.');
 				}
 				log('If you think this is a bug in luamin, please report it:');
-				log('https://github.com/mathiasbynens/luamin/issues/new')
+				log('https://github.com/mathiasbynens/luamin/issues/new');
+				log('\nStack trace:\n');
+				log(error.stack);
 				return process.exit(1);
 			}
 		});
