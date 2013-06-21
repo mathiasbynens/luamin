@@ -41,7 +41,7 @@
 		"test": "node tests/tests.js"
 	},
 	"dependencies": {
-		"luaparse": "~0.1.0"
+		"luaparse": "~0.1.2"
 	},
 	"devDependencies": {
 		"istanbul": "~0.1.37",
