@@ -1,9 +1,9 @@
 {
 	"name": "luamin",
-	"version": "0.2.6",
+	"version": "0.2.7",
 	"main": "luamin.js",
 	"dependencies": {
-		"luaparse": "~0.0.14"
+		"luaparse": "~0.1.2"
 	},
 	"ignore": [
 		"bin",

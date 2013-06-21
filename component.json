@@ -1,6 +1,6 @@
 {
 	"name": "luamin",
-	"version": "0.2.6",
+	"version": "0.2.7",
 	"description": "A Lua minifier written in JavaScript",
 	"repo": "mathiasbynens/luamin",
 	"license": "MIT/GPL",
@@ -8,7 +8,7 @@
 		"luamin.js"
 	],
 	"dependencies": {
-		"oxyc/luaparse": "0.0.14"
+		"oxyc/luaparse": "0.1.2"
 	},
 	"keywords": [
 		"lua",
