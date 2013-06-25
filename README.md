@@ -112,4 +112,4 @@ To generate [the code coverage report](http://rawgithub.com/mathiasbynens/luamin
 
 ## License
 
-luamin is dual licensed under the [MIT](http://mths.be/mit) and [GPL](http://mths.be/gpl) licenses.
+luamin is available under the [MIT](http://mths.be/mit) license.
