@@ -79,7 +79,11 @@
 				}
 				log('If you think this is a bug in luamin, please report it:');
 				log('https://github.com/mathiasbynens/luamin/issues/new');
-				log('\nStack trace:\n');
+				log(
+					'\nStack trace using luamin@%s and luaparse@%s:\n',
+					luamin.version,
+					require('luaparse').version
+				);
 				log(error.stack);
 				return process.exit(1);
 			}
