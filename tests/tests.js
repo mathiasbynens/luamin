@@ -466,6 +466,21 @@
 				'description': 'AssignmentStatement + TableConstructorExpression',
 				'original': 'a = {not true}',
 				'minified': 'a={not true}'
+			},
+			{
+				'description': 'MemberExpression on a TableConstructorExpression',
+				'original': 'x = ({}).y',
+				'minified': 'x=({}).y'
+			},
+			{
+				'description': 'MemberExpression + CallExpression on a TableConstructorExpression',
+				'original': 'x = ({ foo = print }):foo("test")',
+				'minified': 'x=({foo=print}):foo("test")'
+			},
+			{
+				'description': 'MemberExpression + CallExpression on a TableConstructorExpression',
+				'original': 'x = ({ foo = print }).foo("test")',
+				'minified': 'x=({foo=print}).foo("test")'
 			}
 		],
 
@@ -1905,6 +1920,11 @@
 				'description': 'TableConstructorExpression',
 				'original': 'a = { true, a = 1; ["foo"] = "bar", }',
 				'minified': 'a={true,a=1,["foo"]="bar"}'
+			},
+			{
+				'description': 'IndexExpression on a TableConstructorExpression',
+				'original': 'x = ({})[1]',
+				'minified': 'x=({})[1]'
 			}
 		],
 

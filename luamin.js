@@ -199,6 +199,19 @@
 		return a + b;
 	};
 
+	var formatBase = function(base) {
+		var result = '';
+		var needsParens = base.type == 'TableConstructorExpression';
+		if (needsParens) {
+			result += '(';
+		}
+		result += formatExpression(base);
+		if (needsParens) {
+			result += ')';
+		}
+		return result;
+	};
+
 	var formatExpression = function(expression, options) {
 
 		options = extend({
@@ -292,12 +305,12 @@
 
 		} else if (expressionType == 'IndexExpression') {
 
-			result = formatExpression(expression.base) + '[' +
+			result = formatBase(expression.base) + '[' +
 				formatExpression(expression.index) + ']';
 
 		} else if (expressionType == 'MemberExpression') {
 
-			result = formatExpression(expression.base) + expression.indexer +
+			result = formatBase(expression.base) + expression.indexer +
 				formatExpression(expression.identifier, {
 					'preserveIdentifiers': true
 				});
