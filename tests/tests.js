@@ -2006,6 +2006,15 @@
 			}
 		],
 
+		// TableKey
+		'TableKey': [
+			{
+				'description': 'TableKeyString',
+				'original': 'function f(x) end function g(y) local h = { x = y } end',
+				'minified': 'function f(a)end;function g(b)local c={x=b}end',
+			}
+		],
+
 		// Miscellaneous
 		'Miscellaneous': [
 			{
