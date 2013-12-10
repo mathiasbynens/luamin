@@ -344,8 +344,8 @@
 				} else if (field.type == 'TableValue') {
 					result += formatExpression(field.value);
 				} else { // at this point, `field.type == 'TableKeyString'`
-					result += formatExpression(field.key) + '=' +
-						formatExpression(field.value);
+					result += formatExpression(field.key, { preserveIdentifiers: true }) +
+						'=' + formatExpression(field.value);
 				}
 				if (needsComma) {
 					result += ',';
