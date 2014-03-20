@@ -1,6 +1,6 @@
 # luamin, a Lua minifier written in JavaScript
 
-[![Build status](https://travis-ci.org/mathiasbynens/luamin.png?branch=master)](https://travis-ci.org/mathiasbynens/luamin) [![Dependency status](https://gemnasium.com/mathiasbynens/luamin.png)](https://gemnasium.com/mathiasbynens/luamin)
+[![Build status](https://travis-ci.org/mathiasbynens/luamin.svg?branch=master)](https://travis-ci.org/mathiasbynens/luamin) [![Dependency status](https://gemnasium.com/mathiasbynens/luamin.svg)](https://gemnasium.com/mathiasbynens/luamin)
 
 luamin uses the excellent [luaparse](http://oxyc.github.io/luaparse/) library to parse Lua code into an Abstract Syntax Tree. Based on that AST, luamin then generates a (hopefully) more compact yet semantically equivalent Lua program. [Here’s an online demo.](http://mothereff.in/lua-minifier)
 
@@ -106,7 +106,7 @@ To generate [the code coverage report](http://rawgithub.com/mathiasbynens/luamin
 
 ## Author
 
-| [![twitter/mathias](http://gravatar.com/avatar/24e08a9ea84deb17ae121074d0f17125?s=70)](http://twitter.com/mathias "Follow @mathias on Twitter") |
+| [![twitter/mathias](https://gravatar.com/avatar/24e08a9ea84deb17ae121074d0f17125?s=70)](https://twitter.com/mathias "Follow @mathias on Twitter") |
 |---|
 | [Mathias Bynens](http://mathiasbynens.be/) |
 
