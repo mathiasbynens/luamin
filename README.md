@@ -2,7 +2,7 @@
 
 [![Build status](https://travis-ci.org/mathiasbynens/luamin.svg?branch=master)](https://travis-ci.org/mathiasbynens/luamin) [![Dependency status](https://gemnasium.com/mathiasbynens/luamin.svg)](https://gemnasium.com/mathiasbynens/luamin)
 
-luamin uses the excellent [luaparse](http://oxyc.github.io/luaparse/) library to parse Lua code into an Abstract Syntax Tree. Based on that AST, luamin then generates a (hopefully) more compact yet semantically equivalent Lua program. [Here’s an online demo.](http://mothereff.in/lua-minifier)
+luamin uses the excellent [luaparse](http://oxyc.github.io/luaparse/) library to parse Lua code into an Abstract Syntax Tree. Based on that AST, luamin then generates a (hopefully) more compact yet semantically equivalent Lua program. [Here’s an online demo.](https://mothereff.in/lua-minifier)
 
 luamin was inspired by the [LuaMinify](https://github.com/stravant/LuaMinify) and [Esmangle](https://github.com/Constellation/esmangle) projects.
 
@@ -10,7 +10,7 @@ Feel free to fork if you see possible improvements!
 
 ## Installation and usage
 
-Via [npm](http://npmjs.org/):
+Via [npm](https://www.npmjs.com/):
 
 ```bash
 npm install luamin
@@ -34,7 +34,7 @@ In a browser:
 <script src="luamin.js"></script>
 ```
 
-In [Narwhal](http://narwhaljs.org/), [Node.js](http://nodejs.org/), and [RingoJS](http://ringojs.org/):
+In [Narwhal](http://narwhaljs.org/), [Node.js](https://nodejs.org/), and [RingoJS](http://ringojs.org/):
 
 ```js
 var luamin = require('luamin');
@@ -108,8 +108,8 @@ To generate [the code coverage report](http://rawgithub.com/mathiasbynens/luamin
 
 | [![twitter/mathias](https://gravatar.com/avatar/24e08a9ea84deb17ae121074d0f17125?s=70)](https://twitter.com/mathias "Follow @mathias on Twitter") |
 |---|
-| [Mathias Bynens](http://mathiasbynens.be/) |
+| [Mathias Bynens](https://mathiasbynens.be/) |
 
 ## License
 
-luamin is available under the [MIT](http://mths.be/mit) license.
+luamin is available under the [MIT](https://mths.be/mit) license.

@@ -14,7 +14,7 @@
 	var main = function() {
 
 		if (/^(?:-h|--help|undefined)$/.test(option)) {
-			log('luamin v%s - http://mths.be/luamin', luamin.version);
+			log('luamin v%s - https://mths.be/luamin', luamin.version);
 			log([
 				'\nUsage:\n',
 				'\tluamin [-c | --code] [snippet ...]',
