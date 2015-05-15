@@ -2003,6 +2003,11 @@
 				'description': 'Identifier in MemberExpression',
 				'original': 'local x = y() print(x:someProperty())',
 				'minified': 'local a=y()print(a:someProperty())'
+			},
+			{
+				'description': 'Variable shortening should not shorten "self" in a function',
+				'original': 'local t = {num = 2} function t:func() return self.num end',
+				'minified': 'local a={num=2}function a:func()return self.num end'
 			}
 		],
 
