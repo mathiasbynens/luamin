@@ -123,6 +123,11 @@
 	var identifierMap;
 	var identifiersInUse;
 	var generateIdentifier = function(originalName) {
+		// This is required to preserve self in methods
+		if (originalName == 'self') {
+			return originalName;
+		}
+
 		if (hasOwnProperty.call(identifierMap, originalName)) {
 			return identifierMap[originalName];
 		}
