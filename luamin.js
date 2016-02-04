@@ -226,6 +226,7 @@
 
 		var result = '';
 		var currentPrecedence;
+		var associativity;
 		var operator;
 
 		var expressionType = expression.type;
@@ -256,18 +257,44 @@
 			// the inner expression must be wrapped in parens.
 			operator = expression.operator;
 			currentPrecedence = PRECEDENCE[operator];
+			associativity = 'left';
 
 			result = formatExpression(expression.left, {
-				'precedence': currentPrecedence
+				'precedence': currentPrecedence,
+				'direction': 'left',
+				'parent': operator
 			});
 			result = joinStatements(result, operator);
-			result = joinStatements(result, formatExpression(expression.right));
+			result = joinStatements(result, formatExpression(expression.right, {
+				'precedence': currentPrecedence,
+				'direction': 'right',
+				'parent': operator
+			}));
 
 			if (operator == '^' || operator == '..') {
-				currentPrecedence--;
+				associativity = "right";
 			}
 
-			if (currentPrecedence < options.precedence) {
+			if (
+				currentPrecedence < options.precedence ||
+				(
+					currentPrecedence == options.precedence &&
+					associativity != options.direction &&
+					options.parent != '+' &&
+					!(options.parent == '*' && (operator == '/' || operator == '*'))
+				)
+			) {
+				// The most simple case here is that of
+				// protecting the parentheses on the RHS of
+				// `1 - (2 - 3)` but deleting them from `(1 - 2) - 3`.
+				// This is generally the right thing to do. The
+				// semantics of `+` are special however: `1 + (2 - 3)`
+				// == `1 + 2 - 3`. `-` and `+` are the only two operators
+				// who share their precedence level. `*` also can
+				// commute in such a way with `/`, but not with `%`
+				// (all three share a precedence). So we test for
+				// all of these conditions and avoid emitting
+				// parentheses in the cases where we don’t have to.
 				result = '(' + result + ')';
 			}
 
@@ -283,7 +310,19 @@
 				})
 			);
 
-			if (currentPrecedence < options.precedence) {
+			if (
+				currentPrecedence < options.precedence &&
+				// In principle, we should parenthesize the RHS of an
+				// expression like `3^-2`, because `^` has higher precedence
+				// than unary `-` according to the manual. But that is
+				// misleading on the RHS of `^`, since the parser will
+				// always try to find a unary operator regardless of
+				// precedence.
+				!(
+					(options.parent == '^') &&
+					options.direction == 'right'
+				)
+			) {
 				result = '(' + result + ')';
 			}
 
