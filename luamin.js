@@ -261,7 +261,9 @@
 				'precedence': currentPrecedence
 			});
 			result = joinStatements(result, operator);
-			result = joinStatements(result, formatExpression(expression.right));
+			result = joinStatements(result, formatExpression(expression.right, {
+                                'precedence': currentPrecedence
+                        }));
 
 			if (operator == '^' || operator == '..') {
 				currentPrecedence--;
