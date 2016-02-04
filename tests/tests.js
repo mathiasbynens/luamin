@@ -1720,6 +1720,26 @@
 				'original': 'a = 1 - (2 - 3)',
 				'minified': 'a=1-(2-3)'
 			},
+                        {
+				'description': 'Operator precedence: left associativity with special de-parenthesizing',
+				'original': 'a = 1 + (2 - 3)',
+				'minified': 'a=1+2-3'
+			},
+                        {
+				'description': 'Operator precedence: left associativity with special de-parenthesizing',
+				'original': 'a = 1 + (2 + 3)',
+				'minified': 'a=1+2+3'
+			},
+                        {
+				'description': 'Operator precedence: left associativity with special de-parenthesizing',
+				'original': 'a = 1 * (2 / 3)',
+				'minified': 'a=1*2/3'
+			},
+                        {
+				'description': 'Operator precedence: left associativity with special de-parenthesizing',
+				'original': 'a = 1 * (2 * 3)',
+				'minified': 'a=1*2*3'
+			},
 			{
 				'description': 'Operator precedence',
 				'original': 'a = ("a" .. ("b" .. "c"))',

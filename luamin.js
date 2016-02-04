@@ -278,7 +278,7 @@
                             (currentPrecedence === options.precedence &&
                              associativity !== options.direction &&
                              options.parent !== "+" &&
-                             !(options.parent === "*" && operator == "/"))) {
+                             !(options.parent === "*" && (operator === "/" || operator === "*")))) {
                                 // The most simple case here is that of
                                 // protecting the parentheses on the RHS of
                                 // 1 - (2 - 3)  but deleting them from (1 - 2) - 3.
