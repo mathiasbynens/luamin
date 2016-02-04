@@ -1715,6 +1715,11 @@
 				'original': 'a = (((4) ^ 2) ^ 3)',
 				'minified': 'a=(4^2)^3'
 			},
+                        {
+				'description': 'Operator precedence: left associativity',
+				'original': 'a = 1 - (2 - 3)',
+				'minified': 'a=1-(2-3)'
+			},
 			{
 				'description': 'Operator precedence',
 				'original': 'a = ("a" .. ("b" .. "c"))',
@@ -1724,7 +1729,17 @@
 				'description': 'Operator precedence: right associativity',
 				'original': 'a = ((("a") .. "b") .. "c")',
 				'minified': 'a=("a".."b").."c"'
-			}
+			},
+                        {
+                                'description': "Operator precedence: RHS parens",
+                                'original': "a = false and (false or true)",
+                                'minified': "a=false and(false or true)"
+                        },
+                        {
+                                'description': "Operator precedence: RHS parens",
+                                'original': "a = 1 * (2 - 3)",
+                                'minified': "a=1*(2-3)"
+                        }
 		],
 
 		// RepeatStatement
