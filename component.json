@@ -1,6 +1,6 @@
 {
 	"name": "luamin",
-	"version": "0.2.8",
+	"version": "1.0.0",
 	"description": "A Lua minifier written in JavaScript",
 	"repo": "mathiasbynens/luamin",
 	"license": "MIT/GPL",

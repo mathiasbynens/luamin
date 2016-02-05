@@ -1,6 +1,6 @@
 {
 	"name": "luamin",
-	"version": "0.2.8",
+	"version": "1.0.0",
 	"description": "A Lua minifier written in JavaScript",
 	"homepage": "https://mths.be/luamin",
 	"main": "luamin.js",
@@ -20,6 +20,12 @@
 		"url": "https://github.com/mathiasbynens/luamin.git"
 	},
 	"bugs": "https://github.com/mathiasbynens/luamin/issues",
+	"files": [
+		"LICENSE-MIT.txt",
+		"luamin.js",
+		"bin/",
+		"man/"
+	],
 	"directories": {
 		"bin": "bin",
 		"man": "man",
