@@ -403,6 +403,11 @@
 				'minified': 'a=a[b]()'
 			},
 			{
+				'description': 'CallStatement + IndexExpression + BinaryExpression',
+				'original': 'print(("a".."b")[0])',
+				'minified': 'print(("a".."b")[0])'
+			},
+			{
 				'description': 'AssignmentStatement + MemberExpression + CallExpression',
 				'original': 'a = (a):b()',
 				'minified': 'a=a:b()'

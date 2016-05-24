@@ -206,9 +206,11 @@
 
 	var formatBase = function(base) {
 		var result = '';
+		var type = base.type;
 		var needsParens = base.inParens && (
-			base.type == 'TableConstructorExpression' ||
-			base.type == 'FunctionDeclaration'
+			type == 'BinaryExpression' ||
+			type == 'FunctionDeclaration' ||
+			type == 'TableConstructorExpression'
 		);
 		if (needsParens) {
 			result += '(';
