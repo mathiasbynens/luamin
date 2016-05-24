@@ -206,7 +206,10 @@
 
 	var formatBase = function(base) {
 		var result = '';
-		var needsParens = base.type == 'TableConstructorExpression';
+		var needsParens = base.inParens && (
+			base.type == 'TableConstructorExpression' ||
+			base.type == 'FunctionDeclaration'
+		);
 		if (needsParens) {
 			result += '(';
 		}
@@ -328,14 +331,7 @@
 
 		} else if (expressionType == 'CallExpression') {
 
-			if (
-				expression.base.inParens &&
-				expression.base.type == 'FunctionDeclaration'
-			) {
-				result = '(' + formatExpression(expression.base) + ')(';
-			} else {
-				result = formatExpression(expression.base) + '(';
-			}
+			result = formatBase(expression.base) + '(';
 
 			each(expression.arguments, function(argument, needsComma) {
 				result += formatExpression(argument);
