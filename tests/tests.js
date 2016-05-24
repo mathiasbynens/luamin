@@ -1452,6 +1452,16 @@
 			},
 			{
 				'description': 'Operators',
+				'original': 'a = ("foo".."bar".."baz")',
+				'minified': 'a="foo".."bar".."baz"'
+			},
+			{
+				'description': 'Operators',
+				'original': 'a = (("foo".."bar".."baz"))',
+				'minified': 'a="foo".."bar".."baz"'
+			},
+			{
+				'description': 'Operators',
 				'original': 'a = true + false - nil',
 				'minified': 'a=true+false-nil'
 			},
