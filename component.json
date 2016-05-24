@@ -8,7 +8,7 @@
 		"luamin.js"
 	],
 	"dependencies": {
-		"oxyc/luaparse": "0.2.0"
+		"oxyc/luaparse": "0.2.1"
 	},
 	"keywords": [
 		"lua",

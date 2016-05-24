@@ -3,7 +3,7 @@
 	"version": "1.0.2",
 	"main": "luamin.js",
 	"dependencies": {
-		"luaparse": "~0.2.0"
+		"luaparse": "~0.2.1"
 	},
 	"ignore": [
 		"bin",
