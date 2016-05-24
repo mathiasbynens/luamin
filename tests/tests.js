@@ -988,6 +988,11 @@
 				'description': 'FunctionDeclaration + WhileStatement',
 				'original': 'a = function() while true do end end',
 				'minified': 'a=function()while true do end end'
+			},
+			{
+				'description': 'CallExpression + FunctionDeclaration lambda',
+				'original': '(function() end)()',
+				'minified': '(function()end)()'
 			}
 		],
 

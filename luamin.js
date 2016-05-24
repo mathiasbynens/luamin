@@ -328,7 +328,15 @@
 
 		} else if (expressionType == 'CallExpression') {
 
-			result = formatExpression(expression.base) + '(';
+			if (
+				expression.base.inParens &&
+				expression.base.type == 'FunctionDeclaration'
+			) {
+				result = '(' + formatExpression(expression.base) + ')(';
+			} else {
+				result = formatExpression(expression.base) + '(';
+			}
+
 			each(expression.arguments, function(argument, needsComma) {
 				result += formatExpression(argument);
 				if (needsComma) {
