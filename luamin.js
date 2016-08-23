@@ -210,7 +210,8 @@
 		var needsParens = base.inParens && (
 			type == 'BinaryExpression' ||
 			type == 'FunctionDeclaration' ||
-			type == 'TableConstructorExpression'
+			type == 'TableConstructorExpression' ||
+			type == 'LogicalExpression'
 		);
 		if (needsParens) {
 			result += '(';
