@@ -1,4 +1,4 @@
-/*! https://mths.be/luamin v1.0.2 by @mathias */
+/*! https://mths.be/luamin v1.0.3 by @mathias */
 ;(function(root) {
 
 	// Detect free variables `exports`
@@ -643,7 +643,7 @@
 	/*--------------------------------------------------------------------------*/
 
 	var luamin = {
-		'version': '1.0.2',
+		'version': '1.0.3',
 		'minify': minify
 	};
 

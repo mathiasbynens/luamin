@@ -1,6 +1,6 @@
 {
 	"name": "luamin",
-	"version": "1.0.2",
+	"version": "1.0.3",
 	"description": "A Lua minifier written in JavaScript",
 	"homepage": "https://mths.be/luamin",
 	"main": "luamin.js",
