@@ -491,6 +491,11 @@
 				'description': 'MemberExpression + CallExpression on a TableConstructorExpression',
 				'original': 'x = ({ foo = print }).foo("test")',
 				'minified': 'x=({foo=print}).foo("test")'
+			},
+			{
+				'description': 'LogicalExpression in parenthesis + MemberExpression + CallExpression',
+				'original': '(x or y):f()',
+				'minified': '(x or y):f()'
 			}
 		],
 
