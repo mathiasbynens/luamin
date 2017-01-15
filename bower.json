@@ -1,6 +1,6 @@
 {
 	"name": "luamin",
-	"version": "1.0.3",
+	"version": "1.0.4",
 	"main": "luamin.js",
 	"dependencies": {
 		"luaparse": "~0.2.1"
