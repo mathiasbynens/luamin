@@ -496,6 +496,11 @@
 				'description': 'LogicalExpression in parenthesis + MemberExpression + CallExpression',
 				'original': '(x or y):f()',
 				'minified': '(x or y):f()'
+			},
+			{
+				'description': 'StringLiteral in parenthesis + MemberExpression + CallExpression',
+				'original': '("abc"):f()',
+				'minified': '("abc"):f()'
 			}
 		],
 
@@ -718,7 +723,7 @@
 			{
 				'description': 'CallStatement',
 				'original': '("foo")()',
-				'minified': '"foo"()'
+				'minified': '("foo")()'
 			},
 			{
 				'description': 'CallStatement',

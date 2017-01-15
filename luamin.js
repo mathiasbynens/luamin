@@ -211,7 +211,8 @@
 			type == 'BinaryExpression' ||
 			type == 'FunctionDeclaration' ||
 			type == 'TableConstructorExpression' ||
-			type == 'LogicalExpression'
+			type == 'LogicalExpression' ||
+			type == 'StringLiteral'
 		);
 		if (needsParens) {
 			result += '(';
