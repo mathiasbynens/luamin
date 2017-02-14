@@ -53,39 +53,41 @@
 		}
 
 		snippets.forEach(function(snippet) {
-			var result;
-			if (isFile) {
+			if (snippet) {
+				var result;
+				if (isFile) {
+					try {
+						snippet = fs.readFileSync(snippet, 'utf8');
+					} catch(error) {
+						log('Error: no such file. (`%s`)', snippet);
+						return process.exit(1);
+					}
+				}
 				try {
-					snippet = fs.readFileSync(snippet, 'utf8');
+					if (isAST) {
+						snippet = JSON.parse(snippet);
+					}
+					result = minify(snippet);
+					log(result);
 				} catch(error) {
-					log('Error: no such file. (`%s`)', snippet);
+					log(error.message + '\n');
+					if (isAST) {
+						log('Error: failed to minify. Make sure the AST contains a ' +
+							'`globals` property and is');
+						log('fully compatible with luaparse.');
+					} else { // it’s a snippet or an AST
+						log('Error: failed to minify. Make sure the Lua code is valid.');
+					}
+					log('If you think this is a bug in luamin, please report it:');
+					log('https://github.com/mathiasbynens/luamin/issues/new');
+					log(
+						'\nStack trace using luamin@%s and luaparse@%s:\n',
+						luamin.version,
+						require('luaparse').version
+					);
+					log(error.stack);
 					return process.exit(1);
 				}
-			}
-			try {
-				if (isAST) {
-					snippet = JSON.parse(snippet);
-				}
-				result = minify(snippet);
-				log(result);
-			} catch(error) {
-				log(error.message + '\n');
-				if (isAST) {
-					log('Error: failed to minify. Make sure the AST contains a ' +
-						'`globals` property and is');
-					log('fully compatible with luaparse.');
-				} else { // it’s a snippet or an AST
-					log('Error: failed to minify. Make sure the Lua code is valid.');
-				}
-				log('If you think this is a bug in luamin, please report it:');
-				log('https://github.com/mathiasbynens/luamin/issues/new');
-				log(
-					'\nStack trace using luamin@%s and luaparse@%s:\n',
-					luamin.version,
-					require('luaparse').version
-				);
-				log(error.stack);
-				return process.exit(1);
 			}
 		});
 		// Return with exit status 0 outside of the `forEach` loop, in case
