@@ -345,6 +345,17 @@
 			});
 			result += ')';
 
+			// Special case for `select` when varargs are passed:
+			// `select(i,...)` returns all values in `...` starting at `i`
+			// `(select(i,...))` returns the value in `...` at `i`
+			if (
+				expression.inParens &&
+				expression.base.name === 'select' &&
+				expression.arguments[1].value === '...'
+			) {
+				result = '(' + result + ')';
+			}
+
 		} else if (expressionType == 'TableCallExpression') {
 
 			result = formatExpression(expression.base) +
