@@ -1746,6 +1746,11 @@
 				'minified': 'a=4^2^3'
 			},
 			{
+				'description': 'Operator precedence',
+				'original': 'a = (3 + 4) // 7',
+				'minified': 'a=(3+4)//7'
+			},
+			{
 				'description': 'Operator precedence: right associativity',
 				'original': 'a = (((4) ^ 2) ^ 3)',
 				'minified': 'a=(4^2)^3'
