@@ -201,6 +201,11 @@
 			// e.g. `1-` + `-2`
 			return a + separator + b;
 		}
+		var secondLastCharA = a.slice(-2, -1);
+		if (lastCharA == '.' && secondLastCharA != '.' && regexAlphaNumUnderscore.test(firstCharB)) {
+			// e.g. `1.` + `print`
+			return a + separator + b;
+		}
 		return a + b;
 	};
 
