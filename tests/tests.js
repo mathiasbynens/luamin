@@ -1025,6 +1025,16 @@
 			},
 			{
 				'description': 'NumericLiteral',
+				'original': 'a = 1.',
+				'minified': 'a=1.'
+			},
+			{
+				'description': 'NumericLiteral + Any Statement',
+				'original': 'a = 1.;b=2',
+				'minified': 'a=1.;b=2'
+			},
+			{
+				'description': 'NumericLiteral',
 				'original': 'a = 1.1',
 				'minified': 'a=1.1'
 			},
