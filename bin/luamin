@@ -104,7 +104,7 @@
 			data += chunk;
 		});
 		stdin.on('end', function() {
-			if (data.trim().length != 0){
+			if (data.trim().length != 0) {
 				snippets.unshift(data.trim());
 			}
 			main();
