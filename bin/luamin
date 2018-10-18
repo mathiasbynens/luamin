@@ -104,7 +104,9 @@
 			data += chunk;
 		});
 		stdin.on('end', function() {
-			snippets.unshift(data.trim());
+			if (data.trim().length != 0){
+				snippets.unshift(data.trim());
+			}
 			main();
 		});
 		stdin.resume();
