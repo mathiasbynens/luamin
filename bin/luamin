@@ -16,13 +16,14 @@
 		if (/^(?:-h|--help|undefined)$/.test(option)) {
 			log('luamin v%s - https://mths.be/luamin', luamin.version);
 			log([
-				'\nUsage:\n',
-				'\tluamin [-c | --code] [snippet ...]',
-				'\tluamin [-f | --file] [file ...]',
-				'\tluamin [-a | --ast] [AST ...]',
-				'\tluamin [-v | --version]',
-				'\tluamin [-h | --help]',
-				'\nExamples:\n',
+				'\nUsage: luamin <command> [<args>]',
+				'\nCommands:',
+				'\t<-c | --code> <snippet>    Minify a lua code snippet.',
+				'\t<-f | --file> <file>       Minify an entire lua file.',
+				'\t<-a | --ast>  <AST>        Minify a luaparse-compatible AST.',
+				'\t<-v | --version>           Display luamin\'s version in use.',
+				'\t<-h | --help>              Show command line help.',
+				'\nExamples:',
 				'\tluamin -c \'a = ((1 + 2) - 3) * (4 / (5 ^ 6))\'',
 				'\tluamin -f foo.lua',
 				'\techo \'a = "foo" .. "bar"\' | luamin -c',
