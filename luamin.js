@@ -349,6 +349,8 @@
 				}
 			});
 			result += ')';
+			if (expression.inParens)
+				result = '(' + result + ')';
 
 		} else if (expressionType == 'TableCallExpression') {
 
