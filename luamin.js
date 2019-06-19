@@ -647,6 +647,9 @@
 			throw Error('Missing required AST property: `globals`');
 		}
 
+		identifierMap['_ENV'] = '_ENV';
+		identifiersInUse.push('_ENV');
+
 		return formatStatementList(ast.body);
 	};
 
