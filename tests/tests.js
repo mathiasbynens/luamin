@@ -646,7 +646,7 @@
 				'minified': 'a(1,2,3)'
 			},
 			{
-				'description': 'CallStatement',
+				'description': 'EnclosedCallStatement',
 				'original': '(select(1, ...))',
 				'minified': '(select(1,...))'
 			},
