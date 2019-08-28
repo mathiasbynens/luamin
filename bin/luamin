@@ -8,6 +8,7 @@
 	var option = snippets.shift();
 	var isFile = false;
 	var isAST = false;
+	var outputFile;
 	var stdin = process.stdin;
 	var data;
 	var log = console.log;
@@ -16,15 +17,16 @@
 		if (/^(?:-h|--help|undefined)$/.test(option)) {
 			log('luamin v%s - https://mths.be/luamin', luamin.version);
 			log([
-				'\nUsage:\n',
-				'\tluamin [-c | --code] [snippet ...]',
-				'\tluamin [-f | --file] [file ...]',
-				'\tluamin [-a | --ast] [AST ...]',
-				'\tluamin [-v | --version]',
-				'\tluamin [-h | --help]',
-				'\nExamples:\n',
+				'\nUsage: luamin <command> [<args>]',
+				'\nCommands:',
+				'\t<-c | --code> <snippet>    Minify a lua code snippet.',
+				'\t<-f | --file> <file>       Minify an entire lua file.',
+				'\t<-a | --ast>  <AST>        Minify a luaparse-compatible AST.',
+				'\t<-v | --version>           Display luamin\'s version in use.',
+				'\t<-h | --help>              Show command line help.',
+				'\nExamples:',
 				'\tluamin -c \'a = ((1 + 2) - 3) * (4 / (5 ^ 6))\'',
-				'\tluamin -f foo.lua',
+				'\tluamin -f foo.lua -o output.lua',
 				'\techo \'a = "foo" .. "bar"\' | luamin -c',
 				'\tluaparse --scope \'a = 42\' | luamin -a'
 			].join('\n'));
@@ -52,6 +54,18 @@
 			return process.exit(1);
 		}
 
+		snippets.forEach(function(snippet, index) {
+			if (/^(?:-o|--out)$/.test(snippet)) {
+				if (snippets <= index) {
+					log('Error: output file need to be passed after %s', snippet);
+					return process.exit(1);
+				}
+
+				outputFile = snippets[index + 1];
+				snippets.splice(index, 2);
+			}
+		});
+
 		snippets.forEach(function(snippet) {
 			var result;
 			if (isFile) {
@@ -67,7 +81,6 @@
 					snippet = JSON.parse(snippet);
 				}
 				result = minify(snippet);
-				log(result);
 			} catch(error) {
 				log(error.message + '\n');
 				if (isAST) {
@@ -86,6 +99,19 @@
 				);
 				log(error.stack);
 				return process.exit(1);
+			}
+			if (outputFile) {
+				try {
+					fs.writeFileSync(outputFile, result, 'utf8');
+					log('\x1b[32m%s %s\x1b[0m', 'Successfully minified and saved at', outputFile);
+				}
+				catch {
+					log('Error: Could not write to file. (%s)', outputFile)
+					return process.exit(1);
+				}
+			}
+			else {
+				log(result);
 			}
 		});
 		// Return with exit status 0 outside of the `forEach` loop, in case
