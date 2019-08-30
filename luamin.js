@@ -20,6 +20,7 @@
 	var luaparse = root.luaparse || require('luaparse');
 	luaparse.defaultOptions.comments = false;
 	luaparse.defaultOptions.scope = true;
+	luaparse.defaultOptions.luaVersion = '5.3';
 	var parse = luaparse.parse;
 
 	var regexAlphaUnderscore = /[a-zA-Z_]/;
@@ -34,7 +35,7 @@
 		'<': 3, '>': 3, '<=': 3, '>=': 3, '~=': 3, '==': 3,
 		'..': 5,
 		'+': 6, '-': 6, // binary -
-		'*': 7, '/': 7, '%': 7,
+		'*': 7, '/': 7, '//': 7, '%': 7,
 		'unarynot': 8, 'unary#': 8, 'unary-': 8, // unary -
 		'^': 10
 	};
@@ -294,7 +295,7 @@
 					currentPrecedence == options.precedence &&
 					associativity != options.direction &&
 					options.parent != '+' &&
-					!(options.parent == '*' && (operator == '/' || operator == '*'))
+					!(options.parent == '*' && (operator == '/' || operator == '//' || operator == '*'))
 				)
 			) {
 				// The most simple case here is that of
