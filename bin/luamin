@@ -11,6 +11,7 @@
 	var stdin = process.stdin;
 	var data;
 	var log = console.log;
+	var err = console.error;
 	var main = function() {
 
 		if (/^(?:-h|--help|undefined)$/.test(option)) {
@@ -25,8 +26,8 @@
 				'\nExamples:\n',
 				'\tluamin -c \'a = ((1 + 2) - 3) * (4 / (5 ^ 6))\'',
 				'\tluamin -f foo.lua',
-				'\techo \'a = "foo" .. "bar"\' | luamin -c',
-				'\tluaparse --scope \'a = 42\' | luamin -a'
+				'\techo \'a = "foo" .. "bar"\' | luamin -c -',
+				'\tluaparse --scope \'a = 42\' | luamin -a -'
 			].join('\n'));
 			return process.exit(1);
 		}
@@ -41,14 +42,14 @@
 		} else if (/^(?:-a|--ast)$/.test(option)) {
 			isAST = true;
 		} else if (!/^(?:-c|--code)$/.test(option)) {
-			log('Unrecognized option `%s`.', option);
-			log('Try `luamin --help` for more information.');
+			err('Unrecognized option `%s`.', option);
+			err('Try `luamin --help` for more information.');
 			return process.exit(1);
 		}
 
 		if (!snippets.length) {
-			log('Error: option `%s` requires an argument.', option);
-			log('Try `luamin --help` for more information.');
+			err('Error: option `%s` requires an argument.', option);
+			err('Try `luamin --help` for more information.');
 			return process.exit(1);
 		}
 
@@ -58,7 +59,7 @@
 				try {
 					snippet = fs.readFileSync(snippet, 'utf8');
 				} catch(error) {
-					log('Error: no such file. (`%s`)', snippet);
+					err('Error: no such file. (`%s`)', snippet);
 					return process.exit(1);
 				}
 			}
@@ -69,22 +70,22 @@
 				result = minify(snippet);
 				log(result);
 			} catch(error) {
-				log(error.message + '\n');
+				err(error.message + '\n');
 				if (isAST) {
-					log('Error: failed to minify. Make sure the AST contains a ' +
+					err('Error: failed to minify. Make sure the AST contains a ' +
 						'`globals` property and is');
-					log('fully compatible with luaparse.');
+					err('fully compatible with luaparse.');
 				} else { // it’s a snippet or an AST
-					log('Error: failed to minify. Make sure the Lua code is valid.');
+					err('Error: failed to minify. Make sure the Lua code is valid.');
 				}
-				log('If you think this is a bug in luamin, please report it:');
-				log('https://github.com/mathiasbynens/luamin/issues/new');
-				log(
+				err('If you think this is a bug in luamin, please report it:');
+				err('https://github.com/mathiasbynens/luamin/issues/new');
+				err(
 					'\nStack trace using luamin@%s and luaparse@%s:\n',
 					luamin.version,
 					require('luaparse').version
 				);
-				log(error.stack);
+				err(error.stack);
 				return process.exit(1);
 			}
 		});
@@ -94,10 +95,7 @@
 
 	};
 
-	if (stdin.isTTY) {
-		// handle shell arguments
-		main();
-	} else {
+	if (snippets[0] == '-') {
 		// handle pipe
 		data = '';
 		stdin.on('data', function(chunk) {
@@ -105,11 +103,14 @@
 		});
 		stdin.on('end', function() {
 			if (data.trim().length != 0) {
-				snippets.unshift(data.trim());
+				snippets[0] = data.trim();
+				if (option == '-f' || option == '--file') option = '-c';
 			}
 			main();
 		});
 		stdin.resume();
+	} else {
+		main();
 	}
 
 }());
