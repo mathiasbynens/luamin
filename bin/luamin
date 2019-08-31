@@ -2,18 +2,45 @@
 (function() {
 
 	var fs = require('fs');
+	var nopt = require('nopt');
 	var luamin = require('../luamin.js');
 	var minify = luamin.minify;
-	var snippets = process.argv.splice(2);
-	var option = snippets.shift();
 	var isFile = false;
 	var isAST = false;
 	var stdin = process.stdin;
 	var data;
 	var log = console.log;
+
+	/* nopt configuration */
+
+	// option names and types
+	var knownOpts = {
+		"code": Boolean,
+		"file": Boolean,
+		"ast": Boolean,
+		"version": Boolean,
+		"help": Boolean,
+	};
+
+	// explicit option shorthands (added for clarity, but optional
+	// as nopt generates shorthands that start like the full option by default)
+	var shortHands = {
+		"c": ["--code"],
+		"f": ["--file"],
+		"a": ["--ast"],
+		"v": ["--version"],
+		"h": ["--help"]
+	}
+
+	// pass 2 as last argument to skip "node" and "luamin" paths
+	var parsed = nopt(knownOpts, shortHands, process.argv, 2);
+
+	// get positional arguments (caution: it will also get unknown options)
+	var snippets = parsed.argv.remain
+
 	var main = function() {
 
-		if (/^(?:-h|--help|undefined)$/.test(option)) {
+		if (parsed.help) {
 			log('luamin v%s - https://mths.be/luamin', luamin.version);
 			log([
 				'\nUsage:\n',
@@ -31,23 +58,26 @@
 			return process.exit(1);
 		}
 
-		if (/^(?:-v|--version)$/.test(option)) {
+		if (parsed.version) {
 			log('v%s', luamin.version);
 			return process.exit(1);
 		}
 
-		if (/^(?:-f|--file)$/.test(option)) {
+		if (parsed.file) {
 			isFile = true;
-		} else if (/^(?:-a|--ast)$/.test(option)) {
+		} else if (parsed.ast) {
 			isAST = true;
-		} else if (!/^(?:-c|--code)$/.test(option)) {
-			log('Unrecognized option `%s`.', option);
+		} else if (!parsed.code) {
+			log('Error: if `luamin` is not used to print help or version, either ' +
+				'--file, --ast or --code should be used.');
 			log('Try `luamin --help` for more information.');
 			return process.exit(1);
 		}
 
-		if (!snippets.length) {
-			log('Error: option `%s` requires an argument.', option);
+
+		if (snippets.length == 0) {
+			log('Error: at least 1 positional argument must be provided ' +
+				'when using --file, --ast or --code.');
 			log('Try `luamin --help` for more information.');
 			return process.exit(1);
 		}
