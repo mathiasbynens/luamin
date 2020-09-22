@@ -1761,6 +1761,31 @@
 				'minified': 'a=4^2^3'
 			},
 			{
+				'description': 'Operator precedence',
+				'original': 'a = (1 | 2) & 0',
+				'minified': 'a=(1|2)&0'
+			},
+			{
+				'description': 'Operator precedence',
+				'original': 'a = 1 | (2 & 0)',
+				'minified': 'a=1|2&0'
+			},
+			{
+				'description': 'Operator precedence',
+				'original': 'a = (1 | 0) < 1',
+				'minified': 'a=1|0<1'
+			},
+			{
+				'description': 'Operator precedence',
+				'original': 'a = (0 & 1) + 1',
+				'minified': 'a=(0&1)+1'
+			},
+			{
+				'description': 'Operator precedence',
+				'original': 'a = 0 & (1 + 1)',
+				'minified': 'a=0&1+1'
+			},
+			{
 				'description': 'Operator precedence: right associativity',
 				'original': 'a = (((4) ^ 2) ^ 3)',
 				'minified': 'a=(4^2)^3'
