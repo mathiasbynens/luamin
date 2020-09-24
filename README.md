@@ -94,7 +94,7 @@ See `luamin --help` for the full list of options.
 
 ## Support
 
-luamin has been tested in at least Chrome 25-48, Firefox 3-44, Safari 4-9, Opera 10-35, IE 6-11, Edge, Node.js v0.10.0–v5, RingoJS 0.8-0.11, PhantomJS 1.9.0, and Rhino 1.7.6.
+luamin has been tested in at least Chrome 25-48, Firefox 3-44, Safari 4-9, Opera 10-35, IE 6-11, Edge, Node.js v0.10.0–v5, RingoJS 0.8-0.11 and Rhino 1.7.6.
 
 ## Unit tests & code coverage
 

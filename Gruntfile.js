@@ -10,9 +10,6 @@ module.exports = function(grunt) {
 			'cover': {
 				'command': 'istanbul cover --report "html" --verbose --dir "coverage" "tests/tests.js"'
 			},
-			'test-phantomjs': {
-				'command': 'echo "Testing in PhantomJS..."; phantomjs "tests/tests.js"'
-			},
 			'test-rhino': {
 				'command': 'echo "Testing in Rhino..."; rhino -opt -1 "tests.js"',
 				'options': {
@@ -37,7 +34,6 @@ module.exports = function(grunt) {
 
 	grunt.registerTask('cover', 'shell:cover');
 	grunt.registerTask('ci', [
-		'shell:test-phantomjs',
 		'shell:test-rhino',
 		'shell:test-ringo',
 		'shell:test-node',
