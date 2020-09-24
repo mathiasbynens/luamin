@@ -26,16 +26,19 @@
 	var regexAlphaNumUnderscore = /[a-zA-Z0-9_]/;
 	var regexDigits = /[0-9]/;
 
-	// http://www.lua.org/manual/5.2/manual.html#3.4.7
-	// http://www.lua.org/source/5.2/lparser.c.html#priority
+	// https://www.lua.org/manual/5.4/manual.html#3.4.8
+	// https://www.lua.org/source/5.4/lparser.c.html#priority
+	// not supported yet: binary ~, <<, >>, //, unary~
 	var PRECEDENCE = {
 		'or': 1,
 		'and': 2,
 		'<': 3, '>': 3, '<=': 3, '>=': 3, '~=': 3, '==': 3,
-		'..': 5,
-		'+': 6, '-': 6, // binary -
-		'*': 7, '/': 7, '%': 7,
-		'unarynot': 8, 'unary#': 8, 'unary-': 8, // unary -
+		'|': 4,
+		'&': 5,
+		'..': 6,
+		'+': 7, '-': 7, // binary -
+		'*': 8, '/': 8, '%': 8,
+		'unarynot': 9, 'unary#': 9, 'unary-': 9, // unary -
 		'^': 10
 	};
 
