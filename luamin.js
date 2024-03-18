@@ -667,7 +667,7 @@
 	}	else if (freeExports && !freeExports.nodeType) {
 		if (freeModule) { // in Node.js or RingoJS v0.8.0+
 			freeModule.exports = luamin;
-		} else { // in Narwhal or RingoJS v0.7.0-
+		} else { // in RingoJS v0.7.0-
 			extend(freeExports, luamin);
 		}
 	} else { // in Rhino or a web browser
