@@ -1629,7 +1629,7 @@
 
 		// Operator precedence
 		'Operator precedence': [
-		// http://www.lua.org/manual/5.1/manual.html#2.5.6
+		// https://www.lua.org/manual/5.4/manual.html#3.4.8
 			{
 				'description': 'Operator precedence',
 				'original': 'a = (1 + 2) * 3',
@@ -1761,6 +1761,31 @@
 				'minified': 'a=4^2^3'
 			},
 			{
+				'description': 'Operator precedence',
+				'original': 'a = (1 | 2) & 0',
+				'minified': 'a=(1|2)&0'
+			},
+			{
+				'description': 'Operator precedence',
+				'original': 'a = 1 | (2 & 0)',
+				'minified': 'a=1|2&0'
+			},
+			{
+				'description': 'Operator precedence',
+				'original': 'a = (1 | 0) < 1',
+				'minified': 'a=1|0<1'
+			},
+			{
+				'description': 'Operator precedence',
+				'original': 'a = (0 & 1) + 1',
+				'minified': 'a=(0&1)+1'
+			},
+			{
+				'description': 'Operator precedence',
+				'original': 'a = 0 & (1 + 1)',
+				'minified': 'a=0&1+1'
+			},
+			{
 				'description': 'Operator precedence: right associativity',
 				'original': 'a = (((4) ^ 2) ^ 3)',
 				'minified': 'a=(4^2)^3'
@@ -1809,7 +1834,87 @@
 				'description': 'Operator precedence: RHS parens',
 				'original': 'a = 1 * (2 - 3)',
 				'minified': 'a=1*(2-3)'
-			}
+			},
+			{
+				'description': 'Operator precedence: ^ before unary~, keep parentheses',
+				'original': 'a =(~1)^2',
+				'minified': 'a=(~1)^2'
+			},
+			{
+				'description': 'Operator precedence: ^ before unary~, strip parentheses',
+				'original': 'a =~(1^2)',
+				'minified': 'a=~1^2'
+			},
+			{
+				'description': 'Operator precedence: unary~ before *, keep parentheses',
+				'original': 'a = ~(1 * 2)',
+				'minified': 'a=~(1*2)'
+			},
+			{
+				'description': 'Operator precedence: unary~ before *, strip parentheses',
+				'original': 'a = (~1) * 2',
+				'minified': 'a=~1*2'
+			},
+			{
+				'description': 'Operator precedence: unary~ before //, keep parentheses',
+				'original': 'a = ~(1 // 2)',
+				'minified': 'a=~(1//2)'
+			},
+			{
+				'description': 'Operator precedence: unary~ before //, strip parentheses',
+				'original': 'a = (~1) // 2',
+				'minified': 'a=~1//2'
+			},
+			{
+				'description': 'Operator precedence: // before +, keep parentheses',
+				'original': 'a = (1 + 2) // 3',
+				'minified': 'a=(1+2)//3'
+			},
+			{
+				'description': 'Operator precedence: // before +, strip parentheses',
+				'original': 'a = 1 + (2 // 3)',
+				'minified': 'a=1+2//3'
+			},
+			{
+				'description': 'Operator precedence: .. before <<, keep parentheses',
+				'original': 'a = 1 .. (2 << 3)',
+				'minified': 'a=1 ..(2<<3)'
+			},
+			{
+				'description': 'Operator precedence: .. before <<, strip parentheses',
+				'original': 'a = (1 .. 2) << 3',
+				'minified': 'a=1 ..2<<3'
+			},
+			{
+				'description': 'Operator precedence: .. before >>, keep parentheses',
+				'original': 'a = 1 .. (2 >> 3)',
+				'minified': 'a=1 ..(2>>3)'
+			},
+			{
+				'description': 'Operator precedence: .. before >>, strip parentheses',
+				'original': 'a = (1 .. 2) >> 3',
+				'minified': 'a=1 ..2>>3'
+			},
+			{
+				'description': 'Operator precedence: & before binary ~, keep parentheses',
+				'original': 'a = 1 & (2 ~ 3)',
+				'minified': 'a=1&(2~3)'
+			},
+			{
+				'description': 'Operator precedence: & before binary ~, strip parentheses',
+				'original': 'a = (1 & 2) ~ 3',
+				'minified': 'a=1&2~3'
+			},
+			{
+				'description': 'Operator precedence: ~ before |, keep parentheses',
+				'original': 'a = 1 ~ (2 | 3)',
+				'minified': 'a=1~(2|3)'
+			},
+			{
+				'description': 'Operator precedence: ~ before |, strip parentheses',
+				'original': 'a = (1 ~ 2) | 3',
+				'minified': 'a=1~2|3'
+			},
 		],
 
 		// RepeatStatement
