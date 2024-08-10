@@ -723,7 +723,7 @@
 			{
 				'description': 'CallStatement',
 				'original': '(1)()',
-				'minified': '1()'
+				'minified': '(1)()'
 			},
 			{
 				'description': 'CallStatement',
@@ -733,7 +733,7 @@
 			{
 				'description': 'CallStatement',
 				'original': '(true)()',
-				'minified': 'true()'
+				'minified': '(true)()'
 			},
 			{
 				'description': 'CallStatement + CallExpression',
@@ -864,6 +864,11 @@
 				'description': 'CallStatement + StringCallExpression + StringCallExpression',
 				'original': 'a"foo""bar"',
 				'minified': 'a"foo""bar"'
+			},
+			{
+				'description': 'CallStatement + StringCallExpression + StringCallExpression',
+				'original': '(nil) "" ""',
+				'minified': '(nil)""""'
 			},
 			{
 				'description': 'CallStatement + StringCallExpression + TableCallExpression',
@@ -1335,6 +1340,11 @@
 				'description': 'LocalStatement',
 				'original': 'local function a() end; local function a() end;',
 				'minified': 'local function a()end;local function a()end'
+			},
+			{
+				'description': 'LocalStatement + CallExpression',
+				'original': 'a = b[1];(c or d)(e)',
+				'minified': 'a=b[1];(c or d)(e)'
 			}
 		],
 
