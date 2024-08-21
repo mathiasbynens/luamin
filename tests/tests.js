@@ -485,12 +485,12 @@
 			{
 				'description': 'MemberExpression + CallExpression on a TableConstructorExpression',
 				'original': 'x = ({ foo = print }):foo("test")',
-				'minified': 'x=({foo=print}):foo("test")'
+				'minified': 'x=({foo=print}):foo"test"'
 			},
 			{
 				'description': 'MemberExpression + CallExpression on a TableConstructorExpression',
 				'original': 'x = ({ foo = print }).foo("test")',
-				'minified': 'x=({foo=print}).foo("test")'
+				'minified': 'x=({foo=print}).foo"test"'
 			},
 			{
 				'description': 'LogicalExpression in parenthesis + MemberExpression + CallExpression',

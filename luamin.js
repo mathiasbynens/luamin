@@ -341,15 +341,23 @@
 
 		} else if (expressionType == 'CallExpression') {
 
-			result = formatBase(expression.base) + '(';
+			if (expression.arguments.length == 1 && (
+				expression.arguments[0].type == 'TableConstructorExpression' ||
+				expression.arguments[0].type == 'StringLiteral'
+			)) {
+				result = formatExpression(expression.base) +
+					formatExpression(expression.arguments[0]);
+			} else {
+				result = formatBase(expression.base) + '(';
 
-			each(expression.arguments, function(argument, needsComma) {
-				result += formatExpression(argument);
-				if (needsComma) {
-					result += ',';
-				}
-			});
-			result += ')';
+				each(expression.arguments, function(argument, needsComma) {
+					result += formatExpression(argument);
+					if (needsComma) {
+						result += ',';
+					}
+				});
+				result += ')';
+			}
 
 		} else if (expressionType == 'TableCallExpression') {
 
